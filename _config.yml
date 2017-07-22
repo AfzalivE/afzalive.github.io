@@ -28,7 +28,7 @@ github_username:  jekyll
 markdown: kramdown
 theme: jekyll-theme-hydejack
 
-plugins:
+plugins_dir:
   - jekyll-feed
 
 # Exclude from processing.
