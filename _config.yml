@@ -13,18 +13,17 @@ url:                 https://afzalive.github.io
 baseurl:             ""
 
 # A very short description of your page
-tagline:             A developer who knows nothing.
+tagline:             
 
 # A short description of the page, used in the sidebar and as fallback for the meta description tag.
 # Markdown enabled, but don't use more than one paragraph (enforced by `>`)
 description:         >
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  Open `_config.yml` to edit this text.
+  Random write-ups
 
 # This should be the same author as first entry in `_data/authors.yml`
 author:
   name:              Afzal Najam
-  email:             <mail@domain.tld>
+  email:             mail@domain.tld
 
 # Fallback image and color
 image:               /assets/img/nap.jpg
@@ -48,7 +47,7 @@ google_fonts:        Roboto+Slab:700|Noto+Serif:400,400i,700,700i
 google_analytics:    <UA-XXXXXXXX-X>
 
 # Setting a disqus shortname will enable the comment section on pages with `comments: true` in the front matter
-disqus_shortname:    <username>
+disqus_shortname:    afzaln
 
 # This text will appear in the footer of every page. Markdown enabled.
 copyright:           '&copy; 2017. All rights reserved.'
