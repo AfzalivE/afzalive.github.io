@@ -11,12 +11,12 @@ It all began with me being annoyed enough at a bug to think “I should do somet
 
 To check out the latest of Android Studio, simply type in these commands.
 
-```
+~~~
 $ mkdir studio-master-dev
 $ cd studio-master-dev
 $ repo init -u https://android.googlesource.com/platform/manifest -b studio-master-dev
 $ repo sync
-```
+~~~
 
 
 ## The setup
@@ -34,17 +34,19 @@ for!
 
 The first issue we’re investigating today is, from what I recall, a recent regression. For a custom view that extends a layout and the `tools:parentTag` attribute `getChildAt(0)` is present in the merge layout XML, if you call  In the constructor, the preview panel complains that that element is a LinearLayout and it cannot be cast to, say, TextView. However, it works perfectly at runtime.
 
-_> **Late edit:** I believe [this is the related issue](https://code.google.com/p/android/issues/detail?id=230604) in the tracker._
+> _**Late edit:** I believe [this is the related issue](https://code.google.com/p/android/issues/detail?id=230604) in the tracker._
+{:.lead}
 
 ## Reproducing the bug
 
 Time to create a test project. Oh hold on, what’s that? The debug build doesn’t contain an embedded JDK, so Android Studio is unable to find one. Turns out, it’s an easy temporary fix. Just comment out lines 431–435 in IdeSdks.java. Run it again, and bam! Android Studio is able to find the external JDK and project opens up without an issue. Now, go to Module Settings (right-click module), and change the Project SDK to Android SDK. Re-open the project so Gradle can sync and everything is good in the world again. I hope we don’t have to do this every time we run a build, but we probably do.
 
-_> **Note:** Great news, we don’t!_
+> _**Note:** Great news, we don’t!_
+{:.lead}
 
 Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
 
-```java
+~~~java
 public class TestView extends LinearLayout {
     public TestView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,11 +56,11 @@ public class TestView extends LinearLayout {
         tv.setText("Hi");
     }
 }
-```
+~~~
 
 Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout.
 
-```xml
+~~~xml
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -79,11 +81,11 @@ Inflate a merge XML layout in the constructor, with a TextView as the first chil
         android:text="Hello"/>
 
 </merge>
-```
+~~~
 
 Alright, let’s build the project. Take a moment to appreciate that we’re building a project, inside an IDE that we just built, and then put this view in our `activity_main.xml`, and preview it.
 
-```xml
+~~~xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -107,11 +109,11 @@ Alright, let’s build the project. Take a moment to appreciate that we’re bui
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>
-```
+~~~
 
 As expected, there’s the error. Let’s pull up the exception using “Show Exception” and see what we’re dealing with.
 
-```java
+~~~java
 java.lang.ClassCastException: android.widget.LinearLayout cannot be cast to android.widget.TextView
  at com.afzaln.issueonetest.TestView.<init>(TestView.java:19)
  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
@@ -126,7 +128,7 @@ java.lang.ClassCastException: android.widget.LinearLayout cannot be cast to andr
  at android.view.BridgeInflater.loadCustomView(BridgeInflater.java:345)
  at android.view.BridgeInflater.createViewFromTag(BridgeInflater.java:245)
  at android.view.LayoutInflater.createViewFromTag(LayoutInflater.java:727)...
-```
+~~~
 
 Looks exactly like I thought. The preview hierarchy suggests that LinearLayout is a child of our custom view, TestView, which is not the case in reality. So a workaround would be to just use `getChildAt(0).getChildAt(0)`. That, however, fails at runtime because that’s not the real hierarchy in the compiled app, also our “fixed” preview is slightly wrong, it’s using the merge tag’s orientation attribute. So what’s really happening?
 
@@ -144,7 +146,8 @@ the static *`createSnapshotForMerge()`* method.
 
 This method basically says: If there’s a `tools:parentTag` attribute, create a “Synthetic tag” with for this XML tag, so that later on, `layoutlib` treats it as if it were the specified “parentTag” instead of the merge tag, and that is how we got the much-demanded parentTag feature, which is a very useful feature, might I add.
 
-_> [The original issue asking for this feature](https://code.google.com/p/android/issues/detail?id=61652)_
+> _[The original issue asking for this feature](https://code.google.com/p/android/issues/detail?id=61652)_
+{:.lead}
 
 At this point, it doesn’t seem that simple to figure whether this XML tag is the root tag in the layout or if it’s coming from being included in another layout. Upon inspection of the `rootTag` object, it looks pretty identical in both cases.
 However, I can obviously confirm that making the `parentTag` variable `null` gets rid of both, this whole issue, and the feature.
