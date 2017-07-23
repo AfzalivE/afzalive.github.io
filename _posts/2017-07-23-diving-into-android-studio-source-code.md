@@ -1,4 +1,8 @@
 ---
+layout: post
+title: "Diving into Android Studio source code"
+date:   2017-07-23 04:11:40 -0400
+categories: android android-studio
 published: true
 ---
 It all began with me being annoyed enough at a bug to think “I should do something more than just file another issue,” and so I cloned the Android Studio code, using instructions from [http://tools.android.com/build/studio](http://tools.android.com/build/studio).
@@ -19,7 +23,7 @@ $ repo sync
 
 I wanted to troubleshoot an issue in the Preview panel so I had to build Android Studio. To do this, you open the `tools/idea` folder in IDEA. The IDE will take its sweet time indexing and setting up the project, it took 7 minutes for me.
 
-Now, building Android Studio is quite different from building an Android app. Thankfully, though, since Android tools are mostly Java and Groovy-based, we can use IntelliJ IDEA to build them. 
+Now, building Android Studio is quite different from building an Android app. Thankfully, though, since Android tools are mostly Java and Groovy-based, we can use IntelliJ IDEA to build them.
 
 Also, even though the guide says “use JDK 1.6”, I found that  ConstraintSolver code had Lambdas and some parts of the code used Diamonds, so obviously, we needed JDK 1.8 for some things. Thanks to [Nicolas Roard](https://medium.com/u/c006d5238349)’s  confirmation (ConstraintLayout team), “you should indeed use JDK 1.8.” So switch the Project SDK to JDK 1.8 and rename it to “IDEA jdk”.
 
@@ -28,7 +32,7 @@ for!
 
 ## The actual problem
 
-The first issue we’re investigating today is, from what I recall, a recent regression. For a custom view that extends a layout and the `tools:parentTag` attribute `getChildAt(0)` is present in the merge layout XML, if you call  In the constructor, the preview panel complains that that element is a LinearLayout and it cannot be cast to, say, TextView. However, it works perfectly at runtime. 
+The first issue we’re investigating today is, from what I recall, a recent regression. For a custom view that extends a layout and the `tools:parentTag` attribute `getChildAt(0)` is present in the merge layout XML, if you call  In the constructor, the preview panel complains that that element is a LinearLayout and it cannot be cast to, say, TextView. However, it works perfectly at runtime.
 
 _> **Late edit:** I believe [this is the related issue](https://code.google.com/p/android/issues/detail?id=230604) in the tracker._
 
@@ -52,7 +56,7 @@ public class TestView extends LinearLayout {
 }
 ```
 
-Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout. 
+Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -136,7 +140,7 @@ In practice, this proved to be not so straight-forward. You see, what happens is
 layout. This includes passing it a custom `LayoutLibCallback` instance which contains an implementation of an `ILayoutPullParser`. This implementation is obtained from the `LayoutPullParserFactory.create()` method, based on what type of resource we’re dealing with. Is it a Layout, Drawable, Menu, or raw XML?
 
 In our case, it’s a Layout, so that means we get an instance of the `LayoutPsiPullParser` class, specifically the constructor at line 134. From here, we see that Android Studio calls the static *`createSnapshot()`* method so we follow it there. Here is the code which decides different tags in the XML layout. Going down this hole, we finally figure out the part where the IDE decides what to do with the `parentTag` attribute, in `LayoutPsiPullParser:683`, which is
-the static *`createSnapshotForMerge()`* method. 
+the static *`createSnapshotForMerge()`* method.
 
 This method basically says: If there’s a `tools:parentTag` attribute, create a “Synthetic tag” with for this XML tag, so that later on, `layoutlib` treats it as if it were the specified “parentTag” instead of the merge tag, and that is how we got the much-demanded parentTag feature, which is a very useful feature, might I add.
 
