@@ -1,5 +1,5 @@
 ---
-published: true
+published: false
 ---
 It all began with me being annoyed enough at a bug to think “I should do something more than just file another issue,” and so I cloned the Android Studio code, using instructions from [http://tools.android.com/build/studio](http://tools.android.com/build/studio).
 
