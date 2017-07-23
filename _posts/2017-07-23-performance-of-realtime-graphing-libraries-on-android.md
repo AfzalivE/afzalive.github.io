@@ -1,9 +1,9 @@
 ---
-published: false
 layout: post
 title: Performance of realtime graphing libraries on Android
 date: '2017-07-23 04:11:40 -0400'
-categories: Android Graphs Charts
+tags: [android, graphs, charts]
+published: false
 ---
 > “Which graphing library should I use?”
 {:.lead}
@@ -59,4 +59,3 @@ the screen will be removed from the data set.
 All of these, will be populated at 100Hz, 1000Hz, 10,000Hz, and 100,000Hz.
 
 ### Results
-
