@@ -2,7 +2,9 @@
 layout: post
 title: Diving into Android Studio source code
 date: '2017-07-23 04:11:40 -0400'
-tags: [android, android-studio]
+tags:
+  - android
+  - android-studio
 published: false
 ---
 It all began with me being annoyed enough at a bug to think “I should do something more than just file another issue,” and so I cloned the Android Studio code, using instructions from [http://tools.android.com/build/studio](http://tools.android.com/build/studio).
@@ -11,12 +13,12 @@ It all began with me being annoyed enough at a bug to think “I should do somet
 
 To check out the latest of Android Studio, simply type in these commands.
 
-~~~
+```sh
 $ mkdir studio-master-dev
 $ cd studio-master-dev
 $ repo init -u https://android.googlesource.com/platform/manifest -b studio-master-dev
 $ repo sync
-~~~
+```
 
 
 ## The setup
@@ -46,7 +48,7 @@ Time to create a test project. Oh hold on, what’s that? The debug build doesn�
 
 Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
 
-~~~java
+```java
 public class TestView extends LinearLayout {
     public TestView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,11 +58,11 @@ public class TestView extends LinearLayout {
         tv.setText("Hi");
     }
 }
-~~~
+```
 
 Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout.
 
-~~~xml
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -81,11 +83,11 @@ Inflate a merge XML layout in the constructor, with a TextView as the first chil
         android:text="Hello"/>
 
 </merge>
-~~~
+```
 
 Alright, let’s build the project. Take a moment to appreciate that we’re building a project, inside an IDE that we just built, and then put this view in our `activity_main.xml`, and preview it.
 
-~~~xml
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -109,11 +111,11 @@ Alright, let’s build the project. Take a moment to appreciate that we’re bui
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </LinearLayout>
-~~~
+```
 
 As expected, there’s the error. Let’s pull up the exception using “Show Exception” and see what we’re dealing with.
 
-~~~java
+```java
 java.lang.ClassCastException: android.widget.LinearLayout cannot be cast to android.widget.TextView
  at com.afzaln.issueonetest.TestView.<init>(TestView.java:19)
  at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
@@ -128,7 +130,7 @@ java.lang.ClassCastException: android.widget.LinearLayout cannot be cast to andr
  at android.view.BridgeInflater.loadCustomView(BridgeInflater.java:345)
  at android.view.BridgeInflater.createViewFromTag(BridgeInflater.java:245)
  at android.view.LayoutInflater.createViewFromTag(LayoutInflater.java:727)...
-~~~
+```
 
 Looks exactly like I thought. The preview hierarchy suggests that LinearLayout is a child of our custom view, TestView, which is not the case in reality. So a workaround would be to just use `getChildAt(0).getChildAt(0)`. That, however, fails at runtime because that’s not the real hierarchy in the compiled app, also our “fixed” preview is slightly wrong, it’s using the merge tag’s orientation attribute. So what’s really happening?
 
