@@ -1,3 +1,6 @@
+---
+published: false
+---
 ## Swipe cards from scratch on Android
 
 Recently, I wanted to build something that leveraged the stacked cards swiping paradigm that we've seen in Tinder and Google's own Primer app. Of course, there were quite a few libraries which tried to solve this problem very easily but I was curious about how I would go about implementing such a thing without those libraries.
@@ -56,6 +59,10 @@ Let's also setup the layout XML so that this view is visible in our Activity.
 
 </LinearLayout>
 ```
+
+![swipecards-MainActivity-09062017160017.png]({{site.baseurl}}/_posts/images/2017-09-06/swipecards-MainActivity-09062017160017.png)
+
+
 
 Now, on ```ACTION_DOWN```, we want to capture the initial touch coordinates relative to the top-left corner of our View. We will use these later to determine how much we should move the view while the user is dragging.
 
