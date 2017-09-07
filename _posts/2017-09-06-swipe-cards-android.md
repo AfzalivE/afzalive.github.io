@@ -2,12 +2,10 @@
 layout: post
 title:  'Swipe cards on Android'
 date:   2017-09-06 16:55:40 -0400
-categories: android animations
+tags: [android, animations]
 comments: true
 published: false
 ---
-
-## Swipe cards from scratch on Android
 
 Recently, I wanted to build something that leveraged the stacked cards swiping paradigm that we've seen in Tinder and Google's own Primer app. Of course, there were quite a few libraries which tried to solve this problem very easily but I was curious about how I would go about implementing such a thing without those libraries.
 
@@ -108,6 +106,8 @@ The real movement happens in ```ACTION_MOVE```, where we determine the new posit
 ```
 
 Notice that we're using the ```dx, dy``` values we determined earlier. That's because we want the view to move from the point of user's touch. If we remove those, the view will attach its top-left corner to the touch point. Viola! Our view is draggable now.
+
+{% video /assets/img/posts/2017-09-06/swipecards-1.mp4 720 480 %}
 
 
 ### Rotation
