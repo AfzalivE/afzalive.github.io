@@ -148,11 +148,12 @@ We need to override `onLayout()` to get the initial X and Y values, since that's
     public boolean onTouchEvent(MotionEvent event) {
     // ...
         case MotionEvent.ACTION_MOVE:
-            float newX = event.getRawX();
+            float newX = event.getRawX() + dx;
+            float newY = event.getRawY() + dy;
             float dragDistance = newX - initialX;
             int screenWidth = getResources().getDisplayMetrics().widthPixels;
             float progress = Math.min(Math.max(dragDistance / screenWidth, -1), 1);
-
+            
             animate()
                 .x(newX)
                 .y(newY)
@@ -168,14 +169,14 @@ We need to override `onLayout()` to get the initial X and Y values, since that's
 
 {% video /assets/img/posts/2017-09-06/swipecards-2.mp4 720 480 %}
 
-### Snap it back
+### Determine the action
 
-Another feature of the swipeable cards is that they snap back to their original position based on certain pre-requisites. For simplicity, we'll only focus on horizontal movement, it should be easy to do the same vertically if needed. Let's set those requirements right now:
+Now, we need to decide what constitutes as a succesful swipe, and also if it's a left swipe, a right swipe, or a cancel action. For simplicity, we'll only focus on horizontal movement, it should be easy to do the same vertically if needed. Let's set the requirements for a successful swipe:
 
-- Drag progress is less than 0.3
-- User is dragging back towards the original position
+- Drag progress is greater than 0.3
+- User is dragging away from the original position
 
-The first one is simple. When the user finishes the drag and lifts their finger up, we simply get the progress and see if it's greater than 0.3 or less than -0.3.
+The first one is simple. When the user finishes the drag and lifts their finger up, we simply get the progress and see if it's greater than 0.3 or less than -0.3. Greater than 0.3 means a right swipe, less than -0.3 means a left swipe. Anything in the middle is a cancel action.
 
 ```java
     public static final double PROGRESS_THRESHOLD = 0.3;
@@ -197,9 +198,127 @@ The first one is simple. When the user finishes the drag and lifts their finger 
                 // TODO swipeLeft();
                 break;
             }
+
+            // TODO resetPosition();
             break;
     // ...
     }
 ```    
 
-For the second one, we can keep track of the last progress value in `ACTION_MOVE`. That way, we can determine whether progress increased or decreased when the user lifted their finger.  
+For the second one, we can keep track of the last progress value in `ACTION_MOVE`. That way, we can determine whether progress increased or decreased when the user lifted their finger.
+
+```java
+    private float lastProgress;
+    private boolean isSwipingAway;
+
+// ...
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    // ...
+        case MotionEvent.ACTION_MOVE: {
+            float newX = event.getRawX() + dx;
+            float newY = event.getRawY() + dy;
+            float dragDistance = newX - initialX;
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            float progress = Math.min(Math.max(dragDistance / screenWidth, -1), 1);
+
+            isSwipingAway = Math.abs(progress) > Math.abs(lastProgress);
+            lastProgress = progress;
+
+            animate()
+                    .x(newX)
+                    .y(newY)
+                    .rotation(MAX_ROTATION * progress)
+                    .setDuration(0)
+                    .start();
+            break;
+        }
+    // ...
+```
+
+Now, we can simply check `isSwipingAway` in `ACTION_UP`.
+
+```java
+    public static final double PROGRESS_THRESHOLD = 0.3;
+
+    // ...
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    // ...
+        case MotionEvent.ACTION_UP: {
+            float newX = event.getRawX() + dx;
+            float dragDistance = newX - initialX;
+            int screenWidth = getResources().getDisplayMetrics().widthPixels;
+            float progress = Math.min(Math.max(dragDistance / screenWidth, -1), 1);
+
+            if (isSwipingAway) {
+                if (progress > PROGRESS_THRESHOLD) {
+                    // TODO swipeRight();
+                    break;
+                } else if (progress < -PROGRESS_THRESHOLD) {
+                    // TODO swipeLeft();
+                    break;
+                }
+            }
+
+            // TODO resetPosition();
+            break;
+        }
+    // ...
+    }
+```
+
+Note that I put curly braces for the case statements, this is to limit the scope of the variables. Technically, you can declare them in `ACTION_UP` and reuse them in `ACTION_MOVE` but I just wanted to keep it cleaner. Actually, let's reset this `lastProgress` value just in case there's an edge case.
+
+```java
+    // ...
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    // ...
+        case MotionEvent.ACTION_UP:
+            dx = getX() - event.getRawX();
+            dy = getY() - event.getRawY();
+            lastProgress = 0;
+            break;
+
+```
+
+### Implementing swipe and reset animations
+
+Now, we've got the whole thing working...Except the card doesn't automatically move when the swipe is successful, nor does it go back to its original position when it's cancelled.
+
+It's pretty straight-forward. For resetting the position, we use the `initialX, initialY` values and set the rotation to 0. For swiping, we just move it left or right outside of the screen.
+
+```java
+    private void resetPosition() {
+        animate()
+                .x(initialX)
+                .y(initialY)
+                .rotation(0)
+                .setDuration(200)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+    }
+
+    private void swipeLeft() {
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+
+        animate()
+                .x(-screenWidth)
+                .rotation(MAX_ROTATION)
+                .alpha(0f)
+                .setDuration(150);
+    }
+
+    private void swipeRight() {
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+
+        animate()
+                .x(screenWidth)
+                .rotation(MAX_ROTATION)
+                .alpha(0f)
+                .setDuration(150);
+    }
+```
+
+Uncomment the relevant lines in `ACTION_UP` and we're good to swipe this one card. However, this doesn't remove the view from the hierarhcy once we're done with it so let's take care of that.
