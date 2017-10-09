@@ -42,7 +42,7 @@ Not included (but wish I could include in future):
 * (Free) [WilliamChart](https://github.com/diogobernardino/WilliamChart)
 
 
-#### Benchmark Criteria
+# Benchmark Criteria
 
 I’m going to use a Google Pixel for this and we’re going to evaluate rendering frame
 rates (FPS) and memory usage in 5 areas:
@@ -58,12 +58,15 @@ on the screen while the rest is being populated. FIFO (First in first out) means
 
 All of these, will be populated at 100Hz, 1000Hz, 10000Hz, and 100000Hz.
 
-### Results
+# Results
 
-### 100 Hz
+## 100 Hz
 
-### 1000 Hz
+## 1000 Hz
 
-### 10000 Hz
+## 10000 Hz
 
-### 100000 Hz
+## 100000 Hz
+
+
+# Conclusion
