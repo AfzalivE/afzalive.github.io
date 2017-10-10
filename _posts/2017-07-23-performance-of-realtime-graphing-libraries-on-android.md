@@ -68,5 +68,29 @@ All of these, will be populated at 100Hz, 1000Hz, 10000Hz, and 100000Hz.
 
 ## 100000 Hz
 
+# Breakdown by library
+
+## AndroidPlot
+
+![AndroidPlot 100Hz](https://github.com/AfzalivE/AndroidChartBenchmark/raw/master/stats/imgs/AndroidPlot_100Hz.png)
+
+
+## GraphView
+
+![GraphView 100Hz](https://github.com/AfzalivE/AndroidChartBenchmark/raw/master/stats/imgs/GraphView_100Hz.png)
+
+
+## Hello Charts
+
+![HelloCharts 100Hz](https://github.com/AfzalivE/AndroidChartBenchmark/raw/master/stats/imgs/HelloCharts_100Hz.png)
+
+
+## MPAndroidChart
+
+![MPAndroidChart 100Hz](https://github.com/AfzalivE/AndroidChartBenchmark/raw/master/stats/imgs/MPAndroidChart_100Hz.png)
+
+
+## SciChart
+
 
 # Conclusion
