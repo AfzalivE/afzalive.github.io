@@ -50,10 +50,7 @@ Time to create a test project. Oh hold on, what’s that? The debug build doesn�
 1. Just comment out lines 431–435 in IdeSdks.java. Run it again, and bam! Android Studio is able to find the external JDK and project opens up without an issue. 
 2. Now, go to Module Settings (right-click module), and change the Project SDK to Android SDK. Re-open the project so Gradle can sync and everything is good in the world again. Thankfully, we don’t have to do this every time we run a build.
 
-> _**Note:** Great news, we don’t!_
-{:.lead}
-
-1\. Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
+3. Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
 
 ```java
 public class TestView extends LinearLayout {
@@ -67,7 +64,7 @@ public class TestView extends LinearLayout {
 }
 ```
 
-2\. Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout.
+4\. Inflate a merge XML layout in the constructor, with a TextView as the first child in the layout.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -92,7 +89,7 @@ public class TestView extends LinearLayout {
 </merge>
 ```
 
-3\. Alright, let’s build the project. Take a moment to appreciate that we’re building a project, inside an IDE that we just built. Then put this view in our `activity_main.xml`, and finally, let's preview it.
+5\. Alright, let’s build the project. Take a moment to appreciate that we’re building a project, inside an IDE that we just built. Then put this view in our `activity_main.xml`, and finally, let's preview it.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
