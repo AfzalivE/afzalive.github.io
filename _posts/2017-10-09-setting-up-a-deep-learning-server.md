@@ -48,6 +48,9 @@ Setting up R Studio Server was the easiest thing in all of this.
 ## SSHFS
 
 ->>> Commands, mount and unmount
+https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh
+https://jonathansblog.co.uk/mount-sftp-folder-with-finder
+
 
 ## Samba
 
@@ -56,12 +59,14 @@ Setting up R Studio Server was the easiest thing in all of this.
 # Securing the remote server
 
 ->>> Link to securing ssh
+https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
 
 # Making it look good
 
 ->>> byobu
 ->>> scripts and tricks to make it less of a chore everytime
 
+0. Mount the remote volume
 1. Open Spyder on local machine
 2. Open Remote byobu session
 3. Run start_spyder_kernel.sh
