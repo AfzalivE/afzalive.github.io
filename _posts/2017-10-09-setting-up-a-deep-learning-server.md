@@ -22,9 +22,25 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 
 # Setting up R Studio Server
 
+Setting up R Studio Server was the easiest thing in all of this.
+
+`sudo apt-get install r-studio-server`
+
+# Setting up Anaconda
+
 # Setting up IPython/Spyder Kernel
 
 # Getting them both to start at boot
+
+# Mounting the remote folder as a volume
+
+## SSHFS
+
+## Samba
+
+# Securing the remote server
+
+## ssh config
 
 # Issues
 
@@ -32,3 +48,5 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 2. Accessing your computer without the port forwarding mess
 
 # Did it work?
+
+# Making it effortless (or close enough)
