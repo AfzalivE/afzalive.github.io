@@ -63,7 +63,7 @@ https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
 
 # Making it look good
 
-->>> byobu
+->>> byobu, why, because temp monitoring, screen but better!
 ->>> scripts and tricks to make it less of a chore everytime
 
 0. Mount the remote volume
