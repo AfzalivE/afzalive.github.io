@@ -22,10 +22,9 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 
 # Installing Tensorflow, Nvidia drivers, CUDA, cuDNN
 
-->>> Link to a good article for this, no need to repeat
 ->>> How to set ubuntu up so that it uses built-in GPU for Xorg and Nvidia GPU for CUDA
 
-- Remove all nvidia and cuda drivers, reset xorg.conf to use intel drivers (paste intel xorg.conf)
+- Remove all nvidia and cuda drivers, reset xorg.conf to use intel drivers (paste intel xorg.conf). (paste commands)
 
 - install nvidia driver with runfile --no-opengl-libs flag, say no to running nvidia-xconfig
 - install cuda driver, without nvidia driver
@@ -38,6 +37,8 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 ->>> Note about ability to set fan speed
 
 - can't set fan speed because we can't run nvidia-settings without an xserver on the gpu
+
+->>> Build tensorflow from source (the best way to use it)
 
 # Setting up R Studio Server
 
