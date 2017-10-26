@@ -67,7 +67,6 @@ Setting up R Studio Server was the easiest thing in all of this.
 https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh
 https://jonathansblog.co.uk/mount-sftp-folder-with-finder
 
-
 ## Samba
 
 ->>> Commands, mount and unmount
