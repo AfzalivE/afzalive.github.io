@@ -93,3 +93,5 @@ https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
 
 1. Spyder kernel is different from IPython Kernel
 2. Accessing your computer without the port forwarding mess
+
+->>> Hamachi, or ZeroTier
