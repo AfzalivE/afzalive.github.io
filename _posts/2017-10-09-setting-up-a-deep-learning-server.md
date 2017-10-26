@@ -24,8 +24,20 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 
 ->>> Link to a good article for this, no need to repeat
 ->>> How to set ubuntu up so that it uses built-in GPU for Xorg and Nvidia GPU for CUDA
+
+- Remove all nvidia and cuda drivers, reset xorg.conf to use intel drivers (paste intel xorg.conf)
+
+- install nvidia driver with runfile --no-opengl-libs flag, say no to running nvidia-xconfig
+- install cuda driver, without nvidia driver
+- install cudnn
+
 ->>> Persistence mode on the Nvidia GPU, because it seems like it takes less power (6W compared to 15W)
+
+- use nvidia-persistenced github repo, install.sh
+
 ->>> Note about ability to set fan speed
+
+- can't set fan speed because we can't run nvidia-settings without an xserver on the gpu
 
 # Setting up R Studio Server
 
