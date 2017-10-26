@@ -30,9 +30,9 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 - install cuda driver, without nvidia driver
 - install cudnn
 
-->>> Persistence mode on the Nvidia GPU, because it seems like it takes less power (6W compared to 15W)
+->>> Persistence mode on the Nvidia GPU, because it seems like it takes less power (6W compared to 15W) apparently
 
-- use nvidia-persistenced github repo, install.sh
+- use nvidia-persistenced github repo, install.sh, to set it up as a service
 
 ->>> Note about ability to set fan speed
 
