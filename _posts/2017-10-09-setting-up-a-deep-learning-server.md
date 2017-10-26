@@ -95,3 +95,4 @@ https://www.cyberciti.biz/tips/linux-unix-bsd-openssh-server-best-practices.html
 2. Accessing your computer without the port forwarding mess
 
 ->>> Hamachi, or ZeroTier
+->>> Duck DNS
