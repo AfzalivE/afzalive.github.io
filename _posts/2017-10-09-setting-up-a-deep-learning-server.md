@@ -38,7 +38,7 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 
 - can't set fan speed because we can't run nvidia-settings without an xserver on the gpu
 
-->>> Build tensorflow from source (the best way to use it)
+->>> Build tensorflow from source (the best way to use it), or build it after setting up anaconda?
 
 # Setting up R Studio Server
 
