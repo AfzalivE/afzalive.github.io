@@ -23,6 +23,9 @@ Then I realized, I don't want to sit in front of this computer in my room! I wan
 # Installing Tensorflow, Nvidia drivers, CUDA, cuDNN
 
 ->>> Link to a good article for this, no need to repeat
+->>> How to set ubuntu up so that it uses built-in GPU for Xorg and Nvidia GPU for CUDA
+->>> Persistence mode on the Nvidia GPU, because it seems like it takes less power (6W compared to 15W), no logic :/
+->>>
 
 # Setting up R Studio Server
 
