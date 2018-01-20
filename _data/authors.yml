@@ -8,7 +8,7 @@ afzal:
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
-    Hi! I'm Afzal Najam. Android developer and Consultant at Avanade. Former Senior Android Developer at Kiwi.ai.
+    Hi! I'm Afzal Najam. Android developer at SurfEasy. Former Senior Android Developer at Kiwi.ai.
 
   # This photo will be used in the about section
   picture:
