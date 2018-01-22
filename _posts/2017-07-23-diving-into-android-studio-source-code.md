@@ -10,6 +10,8 @@ color: '#68B257'
 image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
 comments: true
 ---
+> This article was originally written in March 2017. Since then, the issue in question has been fixed, at least as of Android Studio 3.1 Preview 8. Although, the solution proposed in this article was not used, this write-up has proven itself useful for when I want to build Android Studio.
+
 It all began with me being annoyed enough at a bug to think “I should do something more than just file another issue,” and so I cloned the Android Studio code, using instructions from [http://tools.android.com/build/studio](http://tools.android.com/build/studio).
 
 ## The actual problem
@@ -34,14 +36,17 @@ $ repo sync
 
 ## The setup
 
-I wanted to troubleshoot an issue in the Preview panel so I had to build Android Studio. To do this, you open the `tools/idea` folder in IDEA. The IDE will take its sweet time indexing and setting up the project, it took 7 minutes for me.
+I wanted to troubleshoot an issue in the Preview panel so I had to build Android Studio. To do this, I opened the `tools/idea` folder in IDEA. This folder contains pretty much everything Android-related you see while using Android Studio. Plugins, actions, layout previews, menu items, the Android project view, all the panels, etc.
+
+The IDE will take its sweet time indexing and setting up the project, it took 7 minutes for me.
 
 Now, building Android Studio is quite different from building an Android app. Thankfully, though, since Android tools are mostly Java and Groovy-based, we can use IntelliJ IDEA to build them.
 
-Also, even though the guide says “use JDK 1.6”, I found that  ConstraintSolver code had Lambdas and some parts of the code used Diamonds, so obviously, we needed JDK 1.8 for some things. Thanks to [Nicolas Roard](https://medium.com/u/c006d5238349)’s  confirmation (ConstraintLayout team), “you should indeed use JDK 1.8.” So switch the Project SDK to JDK 1.8 and rename it to “IDEA jdk”.
+Note: Even though the guide says “use JDK 1.6”, I found that ConstraintSolver code had Lambdas and some parts of the code used Diamonds, so obviously, we needed JDK 1.8 for some things. Thanks to [Nicolas Roard](https://www.reddit.com/r/androiddev/comments/5y4lil/constraintlayout_102_is_now_available/deorcrs/)’s  confirmation (ConstraintLayout team), “you should indeed use JDK 1.8.” So switch the Project SDK to JDK 1.8 and rename it to “IDEA jdk” (very important!).
 
-Hit the Build button, you might come across some Kotlin errors about not being able to reassign a final `val`, I changed those to `var`. Build  again, and run, and finally, there’s that little Android Studio debug build that we were looking
-for!
+Hit the Build button, you might come across some Kotlin errors about not being able to reassign a final `val`, I changed those to `var`. Build  again, and run, and finally, there’s that little Android Studio debug build that we were looking for!
+
+If you get an error like "Could not find IDEA jdk (or JDK 1.8) for module _xyz_, go to the Project Structure > Modules. Find the module _xyz_ and reorder its dependencies so that "IDEA jdk" is at the top.
 
 
 ## Reproducing the bug
