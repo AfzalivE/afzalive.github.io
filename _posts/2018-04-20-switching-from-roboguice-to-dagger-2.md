@@ -37,5 +37,62 @@ First things first, remove RoboGuice from build.gradle and add ButterKnife! Okay
 - A simple regexp to remove `private` from all those fields since ButterKnife doesn't allow private fields
 - Replace `import roboguice.inject.InjectView;` with `import butterknife.BindView;`
 
-## Google inject to javax inject
+## Google annotations to javax annotations
+
+Again, simple stuff, just a matter of replacing the imports. Replace in Path, find `import com.google.inject.` and replace with `import javax.inject.`.
+
+## Here comes the grunt work
+
+Now lets build our object graph. With RoboGuice, we had an `AppModule.java` file that extended `AbstractModule` and overrode its `configure()` method. In it, we bound each interface with it's implementation depending on the flags set in the app. This isn't how Dagger does it so I made two new files:
+
+- AppModule
+- AppComponent
+
+In the AppModule, I first wrote a constructor that took Context, so that I can provide that to all classes that depend on it.
+
+> AppModule.java
+> ```java
+> @Module
+> public class AppModule {
+>    private Context appContext;
+>
+>    public AppModule(Context context) {
+>        this.appContext = context.getApplicationContext();
+>    }
+>
+>    @Provides
+>    Context context() {
+>        return appContext;
+>    }
+>```
+
+Here's how we provide an instance of a hypothetical `ApiService` implementation, which depends on a `PreferenceHelper` class.
+
+> AppModule.java
+> ```java
+>
+>    @Provides
+>    ApiService apiService(ApiServiceImpl impl) {
+>    	return impl;
+>    }
+>```
+
+Turns out that this is the right way to use Dagger to provide an implementation. Where's the constructor call? In the generated code! Here's the class definition for ApiService.
+
+> ApiService.java    
+> ```java
+> public abstract class LoginService {
+>
+> 	public ApiService(PreferenceHelper preferenceHelper) {
+>		this.preferenceHelper = preferenceHelper;
+>	}
+> }
+>```
+
+
+
+
+
+
+
 
