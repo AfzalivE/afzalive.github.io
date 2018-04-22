@@ -37,4 +37,5 @@ First things first, remove RoboGuice from build.gradle and add ButterKnife! Okay
 - A simple regexp to remove `private` from all those fields since ButterKnife doesn't allow private fields
 - Replace `import roboguice.inject.InjectView;` with `import butterknife.BindView;`
 
-## Google Inject
+## Google inject to javax inject
+
