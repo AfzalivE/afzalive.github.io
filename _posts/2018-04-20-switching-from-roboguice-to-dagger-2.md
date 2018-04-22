@@ -20,12 +20,13 @@ Recently, we decided that we wanted to let go of a deprecated, unmaintained Robo
 
 First things first, I removed RoboGuice from build.gradle and added ButterKnife and Dagger 2.12
 
+```groovy
     implementation "com.google.dagger:dagger:2.12"
     annotationProcessor "com.google.dagger:dagger-compiler:2.12"
     
     implementation "com.jakewharton:butterknife:8.8.1"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
-
+```
     
 ## @InjectView
 
