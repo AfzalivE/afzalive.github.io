@@ -89,6 +89,22 @@ Turns out that this is the right way to use Dagger to provide an implementation.
 > }
 >```
 
+There's no `@Inject` on this constructor since this is an abstract class. This is `ApiServiceImpl`. This is where the magic happens.
+
+> ApiServiceImpl.java
+> ```java
+> @Singleton
+> public class ApiServiceImpl extends ApiService {
+>
+>    @Inject
+>    public ApiServiceImpl(PreferenceHelper preferenceHelper) {
+>        super(preferenceHelper);
+>    }
+> }
+> ```
+
+To provide an instance of `PreferenceHelper`, Dagger figures out where to get it, 
+
 
 
 
