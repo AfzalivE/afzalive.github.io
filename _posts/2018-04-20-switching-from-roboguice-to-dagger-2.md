@@ -7,6 +7,7 @@ tags:
   - roboguice
   - dagger
 color: '#68B257'
+image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
 comments: true
 ---
 
