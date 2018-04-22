@@ -20,14 +20,15 @@ Recently, we decided that we wanted to let go of a deprecated, unmaintained Robo
 
 First things first, I removed RoboGuice from build.gradle and added ButterKnife and Dagger 2.12
 
-```groovy
-    implementation "com.google.dagger:dagger:2.12"
-    annotationProcessor "com.google.dagger:dagger-compiler:2.12"
-    
-    implementation "com.jakewharton:butterknife:8.8.1"
-    annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
-```
-    
+> build.gradle
+> ```groovy
+>     implementation "com.google.dagger:dagger:2.12"
+>     annotationProcessor "com.google.dagger:dagger-compiler:2.12"
+>     
+>     implementation "com.jakewharton:butterknife:8.8.1"
+>     annotationProcessor "com.jakewharton:butterknife-compiler:8.8.1"
+> ```
+
 ## @InjectView
 
 First things first, remove RoboGuice from build.gradle and add ButterKnife! Okay, so that wasn't very obvious but we used RoboGuice's InjectView a lot, so we had to do something about that. It was pretty simple. Three steps: 
