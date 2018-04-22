@@ -81,7 +81,7 @@ Turns out that this is the right way to use Dagger to provide an implementation.
 
 > ApiService.java    
 > ```java
-> public abstract class LoginService {
+> public abstract class ApiService {
 >
 > 	public ApiService(PreferenceHelper preferenceHelper) {
 >		this.preferenceHelper = preferenceHelper;
