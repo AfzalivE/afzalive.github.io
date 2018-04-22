@@ -26,12 +26,12 @@ The issue we’re investigating today is, from what I recall, a recent regressio
 
 To check out the latest of Android Studio, simply type in these commands.
 
-```sh
+~~~sh
 $ mkdir studio-master-dev
 $ cd studio-master-dev
 $ repo init -u https://android.googlesource.com/platform/manifest -b studio-master-dev
 $ repo sync
-```
+~~~
 
 
 ## The setup
