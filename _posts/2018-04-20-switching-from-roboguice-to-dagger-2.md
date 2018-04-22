@@ -103,8 +103,28 @@ There's no `@Inject` on this constructor since this is an abstract class. This i
 > }
 > ```
 
-To provide an instance of `PreferenceHelper`, Dagger figures out where to get it, 
+To provide an instance of `PreferenceHelper`, Dagger figures out where to get it and then calls the constructor. Here's the generated factory class:
 
+> ApiServiceImpl_Factory.java
+> ```java
+> public final class ApiServiceImpl_Factory implements Factory<ApiServiceImpl> {
+>   private final Provider<PreferenceHelper> preferenceHelperProvider;
+> 
+>   public ApiServiceImpl_Factory(Provider<PreferenceHelper> preferenceHelperProvider) {
+>     this.preferenceHelperProvider = preferenceHelperProvider;
+>   }
+> 
+>   @Override
+>   public ApiServiceImpl get() {
+>     return new ApiServiceImpl(preferenceHelperProvider.get());
+>   }
+> 
+>   public static Factory<ApiServiceImpl> create(
+>       Provider<PreferenceHelper> preferenceHelperProvider) {
+>     return new ApiServiceImpl_Factory(preferenceHelperProvider);
+>   }
+> }
+> ```
 
 
 
