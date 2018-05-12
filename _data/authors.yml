@@ -57,7 +57,7 @@ afzal:
     # delicious:       <username>
     # stumbleupon:     <username>
     # paypal:          <username>
-    email:           mailto:mail@domain.tld
+    # email:           mailto:mail@domain.tld
     # rss:             https://<url>/feed.xml
 
 # Another author
