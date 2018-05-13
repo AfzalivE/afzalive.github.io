@@ -1,9 +1,14 @@
-{% if include.text %}
-  {% capture desc %}
-{{ include.text | strip_newlines }}
-{:.message}
-  {% endcapture %}
-  {{ desc | markdownify }}
+{% assign alt = include.alt %}
+{% unless alt %}{% capture alt %}<div class="hr pb0"></div>{% endcapture %}{% endunless %}
+
+{% if include.text.size > 0 %}
+  {% unless include.hide %}
+    <p class="message" {% if include.property %}property="{{ include.property }}"{% endif %}>
+      {{ include.text | markdownify | replace:"<p>","" | replace:"</p>","" }}
+    </p>
+  {% else %}
+    {{ alt }}
+  {% endunless %}
 {% else %}
-  <!-- <div class="hr" style="padding-bottom:0"></div> -->
+  {{ alt }}
 {% endif %}

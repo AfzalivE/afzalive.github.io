@@ -1,17 +1,24 @@
-<div class="author">
-  {% if include.author.picture %}
-    {% include srcset-img.html class="me" img=include.author.picture alt=include.author.name %}
+{% assign plugins = site.plugins | default:site.gems %}
+
+<div class="author mt4">
+  {% assign author = include.author %}
+
+  {% if author.picture %}
+    {% include srcset-img.html class="avatar" img=author.picture alt=author.name %}
+  {% elsif plugins contains 'jekyll-avatar' %}
+    {% assign avatar = author.social.github | default:author.github.username | default:author.github  %}
+    {% include avatar-tag.html user=avatar %}
   {% endif %}
 
-  <{{ include.heading_tag | default:'h2' }} class="page-title hr">
-    {{ include.heading | default:include.author.name }}
-  </{{ include.heading_tag | default:'h2' }}>
+  {% assign heading_tag = include.heading_tag | default:'h2' %}
+  {% assign heading_id = include.heading_id %}
+  <{{ heading_tag }} {% if heading_id %}id="{{ heading_id }}"{% endif %} class="page-title hr">
+    {{ include.heading | default:author.name }}
+  </{{ heading_tag }}>
 
-  {{ include.author.about | markdownify }}
+  {{ .author.about | markdownify }}
 
-  {% if include.author.social %}
-    <div class="sidebar-social">
-      {% include social.html social=include.author.social %}
-    </div>
-  {% endif %}
+  <div class="sidebar-social">
+    {% include social.html author=author %}
+  </div>
 </div>
