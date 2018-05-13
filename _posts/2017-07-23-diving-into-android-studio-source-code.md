@@ -6,7 +6,7 @@ tags:
   - android
   - android-studio
 published: true
-color: '#68B257'
+accent_color: '#68B257'
 accent_image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
 comments: true
 ---
