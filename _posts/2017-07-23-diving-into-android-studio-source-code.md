@@ -7,20 +7,20 @@ tags:
   - android-studio
 published: true
 color: '#68B257'
-image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
+accent_image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
 comments: true
 ---
+
 > This article was originally written in March 2017. Since then, the issue in question has been fixed, at least as of Android Studio 3.1 Preview 8. Although, the solution proposed in this article was not used, this write-up has proven itself useful for when I want to build Android Studio.
 
 It all began with me being annoyed enough at a bug to think “I should do something more than just file another issue,” and so I cloned the Android Studio code, using instructions from [http://tools.android.com/build/studio](http://tools.android.com/build/studio).
 
 ## The actual problem
 
-The issue we’re investigating today is, from what I recall, a recent regression. For a custom view that extends a layout and the `tools:parentTag` attribute `getChildAt(0)` is present in the merge layout XML, if you call  In the constructor, the preview panel complains that that element is a LinearLayout and it cannot be cast to, say, TextView. However, it works perfectly at runtime.
+The issue we’re investigating today is, from what I recall, a recent regression. For a custom view that extends a layout and the `tools:parentTag` attribute `getChildAt(0)` is present in the merge layout XML, if you call In the constructor, the preview panel complains that that element is a LinearLayout and it cannot be cast to, say, TextView. However, it works perfectly at runtime.
 
 > [The bug in question](https://code.google.com/p/android/issues/detail?id=230604).
-{:.lead}
-
+> {:.lead}
 
 ## Cloning the repo
 
@@ -33,7 +33,6 @@ $ repo init -u https://android.googlesource.com/platform/manifest -b studio-mast
 $ repo sync
 ```
 
-
 ## The setup
 
 I wanted to troubleshoot an issue in the Preview panel so I had to build Android Studio. To do this, I opened the `tools/idea` folder in IDEA. This folder contains pretty much everything Android-related you see while using Android Studio. Plugins, actions, layout previews, menu items, the Android project view, all the panels, etc.
@@ -42,21 +41,20 @@ The IDE will take its sweet time indexing and setting up the project, it took 7 
 
 Now, building Android Studio is quite different from building an Android app. Thankfully, though, since Android tools are mostly Java and Groovy-based, we can use IntelliJ IDEA to build them.
 
-Note: Even though the guide says “use JDK 1.6”, I found that ConstraintSolver code had Lambdas and some parts of the code used Diamonds, so obviously, we needed JDK 1.8 for some things. Thanks to [Nicolas Roard](https://www.reddit.com/r/androiddev/comments/5y4lil/constraintlayout_102_is_now_available/deorcrs/)’s  confirmation (ConstraintLayout team), “you should indeed use JDK 1.8.” So switch the Project SDK to JDK 1.8 and rename it to “IDEA jdk” (very important!).
+Note: Even though the guide says “use JDK 1.6”, I found that ConstraintSolver code had Lambdas and some parts of the code used Diamonds, so obviously, we needed JDK 1.8 for some things. Thanks to [Nicolas Roard](https://www.reddit.com/r/androiddev/comments/5y4lil/constraintlayout_102_is_now_available/deorcrs/)’s confirmation (ConstraintLayout team), “you should indeed use JDK 1.8.” So switch the Project SDK to JDK 1.8 and rename it to “IDEA jdk” (very important!).
 
-Hit the Build button, you might come across some Kotlin errors about not being able to reassign a final `val`, I changed those to `var`. Build  again, and run, and finally, there’s that little Android Studio debug build that we were looking for!
+Hit the Build button, you might come across some Kotlin errors about not being able to reassign a final `val`, I changed those to `var`. Build again, and run, and finally, there’s that little Android Studio debug build that we were looking for!
 
 If you get an error like "Could not find IDEA jdk (or JDK 1.8) for module _xyz_, go to the Project Structure > Modules. Find the module _xyz_ and reorder its dependencies so that "IDEA jdk" is at the top.
-
 
 ## Reproducing the bug
 
 Time to create a test project. Oh hold on, what’s that? The debug build doesn’t contain an embedded JDK, so Android Studio is unable to find one. Turns out, it’s an easy temporary fix.
 
-1. Just comment out lines 431–435 in IdeSdks.java. Run it again, and bam! Android Studio is able to find the external JDK and project opens up without an issue. 
-2. Now, go to Module Settings (right-click module), and change the Project SDK to Android SDK. Re-open the project so Gradle can sync and everything is good in the world again. Thankfully, we don’t have to do this every time we run a build.
+1.  Just comment out lines 431–435 in IdeSdks.java. Run it again, and bam! Android Studio is able to find the external JDK and project opens up without an issue.
+2.  Now, go to Module Settings (right-click module), and change the Project SDK to Android SDK. Re-open the project so Gradle can sync and everything is good in the world again. Thankfully, we don’t have to do this every time we run a build.
 
-3. Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
+3.  Back to the actual problem. Let’s create our custom view, TestView. Simple LinearLayout subclass.
 
 ```java
 public class TestView extends LinearLayout {
@@ -125,7 +123,6 @@ public class TestView extends LinearLayout {
 
 As expected, there’s the error. Let’s pull up the exception using “Show Exception” and see what we’re dealing with.
 
-
 ```java
 java.lang.ClassCastException: android.widget.LinearLayout cannot be cast to android.widget.TextView
  at com.afzaln.issueonetest.TestView.<init>(TestView.java:19)
@@ -154,8 +151,8 @@ Well, it seems like the fix is simple. If we’re inflating a custom view which 
 In practice, this proved to be not so straight-forward. You see, what happens is that Android Studio this class called `RenderTask` to tell the `layoutlib` package how to inflate the
 layout. This includes passing it a custom `LayoutLibCallback` instance which contains an implementation of an `ILayoutPullParser`. This implementation is obtained from the `LayoutPullParserFactory.create()` method, based on what type of resource we’re dealing with. Is it a Layout, Drawable, Menu, or raw XML?
 
-In our case, it’s a Layout, so that means we get an instance of the `LayoutPsiPullParser` class, specifically the constructor at line 134. From here, we see that Android Studio calls the static *`createSnapshot()`* method so we follow it there. Here is the code which decides different tags in the XML layout. Going down this hole, we finally figure out the part where the IDE decides what to do with the `parentTag` attribute, in `LayoutPsiPullParser:683`, which is
-the static *`createSnapshotForMerge()`* method.
+In our case, it’s a Layout, so that means we get an instance of the `LayoutPsiPullParser` class, specifically the constructor at line 134. From here, we see that Android Studio calls the static _`createSnapshot()`_ method so we follow it there. Here is the code which decides different tags in the XML layout. Going down this hole, we finally figure out the part where the IDE decides what to do with the `parentTag` attribute, in `LayoutPsiPullParser:683`, which is
+the static _`createSnapshotForMerge()`_ method.
 
 This method basically says: If there’s a `tools:parentTag` attribute, create a “Synthetic tag” with for this XML tag, so that later on, `layoutlib` treats it as if it were the specified “parentTag” instead of the merge tag, and that is how we got the much-demanded parentTag feature, which is a very useful feature, might I add.
 
