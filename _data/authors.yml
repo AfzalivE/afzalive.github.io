@@ -16,7 +16,7 @@ afzal:
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
-    Hi! I'm Afzal Najam. Senior Android developer at Symantec. Part of the Norton Wifi Privacy Android team.
+    Hi! I'm Afzal Najam. Android developer since 2010. Basketball fan, woodworker. Dabble in all other technologies. Posts and views are my own.
 
   # This photo will be used in the about section
   picture:
