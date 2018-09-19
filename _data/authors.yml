@@ -5,14 +5,6 @@ afzal:
   name:              Afzal Najam
   email:             mail@domain.tld
 
-  # Every author can have his/her own accent color and image.
-  # This will change the appearance of all pages of this author.
-  # accent_color:      '#268bd2'
-  # accent_image:
-  #   background:      '#202020'
-  #   overlay:         false
-
-
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
@@ -30,9 +22,10 @@ afzal:
   # Comment/uncommet to show/hide
   # Icons appear in order, can be rearranged:
   social:
-    github:          afzalive
     twitter:         afzalive
-    linkedin:        afzalive
+    github:          afzalive
+    # email:           <mail@domain.tld>
+    # rss:             https://<url>/feed.xml
     # facebook:        <username>
     # google:          <number>
     # vk:              <username>
@@ -60,13 +53,13 @@ afzal:
     # npm:             <username>
     # hackernews:      <username>
     # trello:          <firstnamelastname>
+    linkedin:        afzalive
     # xing:            <firstname_lastname_counter>
     # blogger:         <number>
     # delicious:       <username>
     # stumbleupon:     <username>
     # paypal:          <username>
-    # email:           mailto:mail@domain.tld
-    # rss:             https://<url>/feed.xml
+    # download:        <url>
 
 # Another author
 # author2:
@@ -76,15 +69,12 @@ afzal:
 #     Lorem ipsum dolor sit amet, consectetur adipiscing elit,
 #     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 #     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-#     Open `_data/authors.yml` to edit this text.
-#   picture:           https://placehold.it/128x128
-#   twitter:           <username>
-#   github:            <username>
-
-#   # Every author can have his/her own accent color and image.
-#   # This will change the appearance of all pages of this author.
-#   accent_color:      '#268bd2'
-#   accent_image:
-#     background:      '#202020'
-#     overlay:         false
+#
+#    Open `_data/authors.yml` to edit this text.
+#  picture:           https://placehold.it/128x128
+#  twitter:           <username>
+#  github:            <username>
+#  accent_color:      '#268bd2'
+#  accent_image:
+#    background:      '#202020'
+#    overlay:         false
