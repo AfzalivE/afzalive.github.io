@@ -1,5 +1,11 @@
 ---
 published: false
+layout: post
+date: '2017-10-10 20:11:40 -0400'
+tags:
+  - home
+  - home-automation
+comments: true
 ---
 ## Create a SmartThings enabled Raspberry Pi
 
