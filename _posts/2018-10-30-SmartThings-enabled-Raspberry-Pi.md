@@ -1,7 +1,7 @@
 ---
 published: true
 layout: post
-date: '2017-10-10 20:11:40 -0400'
+date: '2018-10-30 1:06:40 -0400'
 tags:
   - home
   - home-automation
