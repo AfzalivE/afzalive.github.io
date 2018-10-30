@@ -6,6 +6,7 @@ tags:
   - home
   - home-automation
 comments: true
+title: Create a SmartThings enabled Raspberry Pi
 ---
 So you've got SmartThings and you've got a Raspberry Pi controlling some things in the house. Wouldn't it be great if you could use the Pi with Smart Things and, in turn, get all the Google Home/Alexa/Homekit control by simply implementing one API?
 
