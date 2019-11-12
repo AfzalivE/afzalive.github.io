@@ -50,18 +50,21 @@ author:
 copyright:             '&copy; Afzal Najam'
 
 # Add links to the footer.
-# Typically you'll want to link to your impress, cookies or privacy policy, etc.
+# Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
 # legal:
 #   - title:             Impress
-#     href:              /impress/
+#     url:               /impress/
 #   - title:             Cookies Policy
-#     href:              /cookies-policy/
+#     url:               /cookies-policy/
+
+# This text will appear in a `<small>` tag in the footer of every page.
+copyright:             © 2018. All rights reserved.
 
 # Format of the permalinks
 permalink:             /:categories/:year-:month-:day-:title/
 
 # Pagination configuration (used by the `blog` layout)
-paginate:              5
+paginate:              10
 paginate_path:         /page-:num/
 
 
@@ -137,7 +140,7 @@ google_analytics:      UA-37122886-1
 
 hydejack:
   # Configure the order of complementary content on blog posts
-  post_addons:         [about, newsletter, related]
+  post_addons:         [about, newsletter, related, random]
 
   # Configure the order of complementary content on project pages
   project_addons:      [about, newsletter, other]
@@ -146,7 +149,7 @@ hydejack:
   no_google_fonts:     false
 
   # Set to `true` if you don't want to show an icon indicating external links
-  no_mark_external:    false
+  no_mark_external:    true
 
   # Set to `true` if third party plugins fail to work with dynamically loaded pages
   no_push_state:       false
@@ -158,8 +161,12 @@ hydejack:
   no_img:              false
 
   # Set to `true` if you do not want parts of the css inlined in <head/>
-  # This *may* be benefitial when serving the site over HTTP/2.
+  # This will increase site build speed dramatically!
   no_inline_css:       false
+
+  # Set to `true` if you don't intend on changing the accent color on a per-page basis.
+  # This will increase site build speed!
+  no_page_style:       false
 
   # Code blocks and tables "break" the layout by spanning the full available width.
   # Set this to true if you want them to be the same width as other content.
@@ -186,7 +193,7 @@ hydejack:
   # Note that dark mode only works in the PRO version of Hydejack.
   dark_mode:
     # Set to `true` to always use the dark theme.
-    always:            true
+    always:            false
 
     # Set to `true` to use the dark theme based on visitors' local time.
     dynamic:           true
@@ -203,6 +210,7 @@ hydejack:
   offline:
     enabled:           false
     cache_version:     1
+
 
 # Collections
 # ========================================================================================
@@ -238,6 +246,7 @@ exclude:
   - .sass-cache
 include:
   - LICENSE.md
+  - .well-known
 
 
 # Plugins
@@ -254,6 +263,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-titles-from-headings
+  - jekyll-replace-img
 
 # Theme
 # ---------------------------------------------------------------------------------------
@@ -307,6 +317,15 @@ relative_links:
 titles_from_headings:
   strip_title:         true
   collections:         true
+  
+replace_img:
+  re_img:              <img\s*(?<attrs>.*?)\s*/>
+  re_ignore:           (re|data)-ignore
+  replacement:         |
+    <hy-img root-margin="512px" %{attrs}>
+      <noscript><img data-ignore %{attrs}/></noscript>
+      <span slot="loading" class="loading"><span class="icon-cog"></span></span>
+    </hy-img>
 
 kramdown:
   footnote_backlink:   '&#x21a9;&#xfe0e;'
