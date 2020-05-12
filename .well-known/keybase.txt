@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/afzal
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://afzaln.com
+  * I am afzal (https://keybase.io/afzal) on keybase.
+  * I have a public key ASCEiRXUkvJrKqp2vh1X3N1jI9nKfF_liHnizkJSvnZFPAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120848915d492f26b2aaa76be1d57dcdd6323d9ca7c5fe58879e2ce4252be76453c0a",
+      "host": "keybase.io",
+      "kid": "0120848915d492f26b2aaa76be1d57dcdd6323d9ca7c5fe58879e2ce4252be76453c0a",
+      "uid": "f8a5efc617a267d71cfbcd49823be219",
+      "username": "afzal"
+    },
+    "merkle_root": {
+      "ctime": 1589256611,
+      "hash": "876839becaeec0dc25bc72ba9d52cd01269db1c96c198fa44d399b44c3812070207ba2f23f12740b6fa788939403491234263059f1c106ae401b0c40ca3b55c3",
+      "hash_meta": "e46c3f370788c6ee5edc33975fee667b95305d8bce48529491a77b2d6383d60e",
+      "seqno": 16261042
+    },
+    "service": {
+      "entropy": "c/gwjfFkn3oUqTRL+dOWVgP0",
+      "hostname": "afzaln.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.4.2"
+  },
+  "ctime": 1589256642,
+  "expire_in": 504576000,
+  "prev": "e20f8d95ba2076e389b40bdba4b09e151f3220821bc4c4cdc3ddcd9c4cb0586e",
+  "seqno": 32,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEghIkV1JLyayqqdr4dV9zdYyPZynxf5Yh54s5CUr52RTwKp3BheWxvYWTESpcCIMQg4g+NlbogduOJtAvbpLCeFR8yIIIbxMTNw93NnEywWG7EIJ5oXLvN5Bk8eguaUxPmVyAePvt751GJ/WjwOCTz59M7AgHCo3NpZ8RAyiIV2iLW25XKB1cXmugTkO0uJyczvJ5Dpxzsy5WqTHRaCdcIEWY2+7FaxnS61YXTCM41vt2J8Mrq7hlClmuWBqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEICWLe60K4ihfU2RN4LvVzrjLEJLEA2TD7IchU60v5yU1o3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/afzal
+
+==================================================================
