@@ -32,7 +32,7 @@ tagline:               >
 
 
 # A list of keywords for your blog
-keywords:              [afzal, najam, android, development, code, program, computer, tech, engineer, science, mobile, symantec, blog]
+keywords:              [afzal, najam, android, development, code, program, computer, tech, engineer, science, mobile, norton, blog]
 
 # A (square) logo for your site.
 # If provided, it will be shown at the top of the sidebar.
@@ -49,16 +49,24 @@ author:
 # This text will appear in a `<small>` tag in the footer of every page.
 copyright:             '&copy; Afzal Najam'
 
+# Add links to the sidebar.
+menu:
+  - title:             About
+    url:               /about/
+  # - title:             Projects
+  #   url:               /projects/
+  # - title:             Résumé
+  #   url:               /resume/
+
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
-# legal:
-#   - title:             Impress
-#     url:               /impress/
-#   - title:             Cookies Policy
-#     url:               /cookies-policy/
-
-# This text will appear in a `<small>` tag in the footer of every page.
-copyright:             © 2020. All rights reserved.
+legal:
+  - title:             LICENSE
+    url:               /LICENSE/
+  - title:             NOTICE
+    url:               /NOTICE/
+  - title:             CHANGELOG
+    url:               /CHANGELOG/
 
 # Format of the permalinks
 permalink:             /:categories/:year-:month-:day-:title/
@@ -104,7 +112,7 @@ font_code:             Fira Code, Menlo, Monaco, Consolas, monospace;
 
 defaults:
   - scope:
-      path:            hyde/
+      path:            other/
     values:
       accent_color:    rgb(38,139,210)
       accent_image:
