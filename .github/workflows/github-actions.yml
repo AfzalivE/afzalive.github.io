@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: helaili/jekyll-action@2.0.4
         with:
+          jekyll_src: /
           target_branch: main
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
