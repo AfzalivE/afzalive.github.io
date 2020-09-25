@@ -14,6 +14,10 @@ url:                   https://afzaln.com
 # e.g. `/hydejack`.
 baseurl:               ''
 
+
+# General settings
+# ---------------------------------------------------------------------------------------
+
 # Language of your content in 2-letter code, e.g.: en, de.
 # You may also provide a location, e.g.: en-us, de_AT.
 lang:                  en
@@ -131,19 +135,19 @@ defaults:
     values:
       sitemap:         false
 
-  # # You can use the following to enable comments on all posts.
-  # - scope:
-  #     type:            posts
-  #   values:
-  #     comments:        true
+  # You can use the following to enable comments on all posts.
+  - scope:
+      type:            posts
+    values:
+      comments:        true
 
   # `jekyll-seo-tag` will mark collection outputs as `BlogPosting`,
   # but we want them to be `WebPage`s:
-  - scope:
-      type:            projects
-    values:
-      seo:
-        type:          WebPage
+  # - scope:
+  #     type:            projects
+  #   values:
+  #     seo:
+  #       type:          WebPage
   - scope:
       type:            featured_categories
     values:
@@ -294,7 +298,7 @@ collections:
 
 
 # File inclusion/exclusion
-# ========================================================================================
+# ----------------------------------------------------------------------------------------
 
 exclude:
   - ./#jekyll-theme-hydejack/node_modules
@@ -304,18 +308,10 @@ exclude:
   - vendor
   - Gemfile
   - Gemfile.lock
-
-exclude:
-  - node_modules
-  - package.json
-  - package-lock.json
-  - webpack.config.js
-  - "*.gemspec"
-  - _js
-  - _plugins
+  - MY-NOTES.md
 include:
-  - LICENSE.md
   - .well-known
+  - LICENSE.md
 
 
 # Plugins
@@ -335,13 +331,6 @@ plugins:
   - jekyll-include-cache
   - jekyll-last-modified-at
 
-
-
-# Theme
-# ---------------------------------------------------------------------------------------
-
-# theme: jekyll-theme-hydejack
-# remote_theme: qwtel/hydejack@gem
 
 # SEO Tag
 # ---------------------------------------------------------------------------------------
