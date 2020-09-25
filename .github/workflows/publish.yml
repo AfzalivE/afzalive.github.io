@@ -4,16 +4,16 @@ name: Build and deploy Jekyll site to GitHub Pages
 # events but only for the master branch
 on:
   push:
-    branches: [ github-actions ]
+    branches: [ dev ]
 
 jobs:
-  github-pages: 
+  publish: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: helaili/jekyll-action@2.0.4
         with:
           jekyll_src: /
-          target_branch: main
+          target_branch: published
         env:
           JEKYLL_PAT: ${{ secrets.JEKYLL_PAT }}
