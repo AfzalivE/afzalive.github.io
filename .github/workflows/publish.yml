@@ -16,4 +16,4 @@ jobs:
           jekyll_src: /
           target_branch: published
         env:
-          JEKYLL_PAT: ${{ github.token }}
+          JEKYLL_PAT: ${{ github.actor }}:${{ github.token }}
