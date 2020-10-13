@@ -8,7 +8,7 @@ afzal:
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about:             |
-    Hi! I'm Afzal Najam. Android developer since 2010. Basketball fan, woodworker. Dabble in all other technologies. Posts and views are my own.
+    I'm an Android developer who loves basketball, living in Toronto, Canada. I currently work at [NortonLifeLock](https://nortonlifelock.com/), mostly on the [Norton Secure VPN](https://play.google.com/store/apps/details?id=com.symantec.securewifi) app.
 
   # This photo will be used in the about section
   picture:

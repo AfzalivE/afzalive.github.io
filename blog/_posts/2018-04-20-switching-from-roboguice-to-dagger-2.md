@@ -2,10 +2,7 @@
 published: true
 layout: post
 date: '2018-04-20 20:11:40 -0400'
-tags:
-  - android
-  - roboguice
-  - dagger
+tags: android roboguice dagger
 color: '#68B257'
 title: Switching from RoboGuice to Dagger 2
 image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'

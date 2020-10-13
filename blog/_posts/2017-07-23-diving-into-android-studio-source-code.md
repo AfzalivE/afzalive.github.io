@@ -2,9 +2,7 @@
 layout: post
 title: Diving into Android Studio source code
 date: '2017-10-10 20:11:40 -0400'
-tags:
-  - android
-  - android-studio
+tags: android android-studio
 published: true
 accent_color: '#68B257'
 accent_image: 'https://cdn-images-1.medium.com/max/1800/1*q91Kf2ywYM092vW0_VzYnA.png'
