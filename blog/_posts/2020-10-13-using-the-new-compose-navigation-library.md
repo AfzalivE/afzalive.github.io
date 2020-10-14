@@ -4,7 +4,7 @@ title: Using the new Compose Navigation library
 date: '2020-10-12 12:10:40 -0400'
 tags: android jetpack compose ui
 comments: true
-published: true
+published: false
 ---
 
 1. this ordered seed list will be replaced by the toc
