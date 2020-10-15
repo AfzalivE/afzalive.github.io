@@ -23,6 +23,7 @@ sitemap: false
       {% if doc.categories  %}"categories": {{  doc.categories  | jsonify }},{% endif %}
       {% if doc.tags        %}"tags": {{        doc.tags        | jsonify }},{% endif %}
       {% if doc.keywords    %}"keywords": {{    doc.keywords    | jsonify }},{% endif %}
+      {% if doc.search      %}"search": {{      doc.search      | jsonify }},{% endif %}
       "collection": {{                          doc.collection  | jsonify }},
       "url": {{                                 doc.url         | jsonify }}
     }{% unless forloop.last %},{% endunless %}{% endfor %}

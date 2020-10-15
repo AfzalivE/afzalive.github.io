@@ -33,7 +33,9 @@ async function getDocuments() {
   const { pages = [], documents = [] } = await fetch(DATA_URL).then(x => x.json());
   const siteData = [
     ...pages,
-    ...documents.map((doc) => {
+    ...documents.filter((doc) => {
+      return !(doc.search && doc.search == "exclude");
+    }).map((doc) => {
       if (doc.date) doc.date = new Date(doc.date);
       return doc;
     }),
