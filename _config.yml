@@ -65,15 +65,15 @@ menu:
 # Add links to the footer.
 # Typically you'll want to link to your cookie- or privacy policy (if appliable), etc..
 legal:
-  - title:             LICENSE
-    url:               /LICENSE/
-  - title:             NOTICE
-    url:               /NOTICE/
-  - title:             CHANGELOG
-    url:               /CHANGELOG/
+  # - title:             LICENSE
+  #   url:               /LICENSE/
+  # - title:             NOTICE
+  #   url:               /NOTICE/
+  # - title:             CHANGELOG
+  #   url:               /CHANGELOG/
 
 # Format of the permalinks
-permalink:             /:categories/:year-:month-:day-:title/
+permalink:             /:categories/:name/
 
 # Pagination configuration (used by the `blog` layout)
 paginate:              10
@@ -141,6 +141,15 @@ defaults:
     values:
       comments:        true
 
+  - scope:
+      type:            drafts
+    values:
+      comments:        false
+      share:           false
+      related:         false
+      sitemap:         false
+      noindex:         true
+
   # `jekyll-seo-tag` will mark collection outputs as `BlogPosting`,
   # but we want them to be `WebPage`s:
   # - scope:
@@ -185,7 +194,7 @@ disqus:                afzaln
 
 hydejack:
   # Configure the order of complementary content on blog posts
-  post_addons:         [about, newsletter, related, random]
+  post_addons:         [about, comments, newsletter, related]
 
   # Configure the order of complementary content on project pages
   project_addons:      [about, newsletter, other]
@@ -285,7 +294,7 @@ hydejack:
 
 collections:
   featured_categories:
-    permalink:         /blog/:name/
+    permalink:         /:name/
     output:            true
 
   featured_tags:
@@ -294,6 +303,10 @@ collections:
 
   projects:
     permalink:         /projects/:path/
+    output:            true
+
+  drafts:
+    permalink:         /:categories/:name/
     output:            true
 
 
