@@ -118,6 +118,7 @@ defaults:
   - scope:
       path:            other/
     values:
+      search:          exclude
       accent_color:    rgb(38,139,210)
       accent_image:
         background:    rgb(32,32,32)
@@ -153,11 +154,12 @@ defaults:
 
   # `jekyll-seo-tag` will mark collection outputs as `BlogPosting`,
   # but we want them to be `WebPage`s:
-  # - scope:
-  #     type:            projects
-  #   values:
-  #     seo:
-  #       type:          WebPage
+  - scope:
+      type:            projects
+    values:
+      search:          exclude
+      # seo:
+      #   type:          WebPage
   - scope:
       type:            featured_categories
     values:
