@@ -3,7 +3,6 @@ layout: post
 title: Intro to Jetpack Compose Navigation
 date: '2020-10-14 10:10:40 -0400'
 tags: android jetpack compose navigation ui
-comments: true
 published: true
 ---
 
