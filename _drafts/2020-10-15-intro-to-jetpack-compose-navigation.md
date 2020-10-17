@@ -6,7 +6,7 @@ tags: android jetpack compose navigation ui
 published: true
 ---
 
-Last year, the Android team at Google announced Jetpack Compose. Since then, it has been seeing lots of updates. Dev releases, and a few months ago, alpha releases with lots of great samples. Many of the sample apps [implemented](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Owl/app/src/main/java/com/example/owl/ui/utils/Navigation.kt) [their](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetsnack/app/src/main/java/com/example/jetsnack/ui/utils/Navigation.kt) own [Navigation](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/JetNews/app/src/main/java/com/example/jetnews/ui/Navigation.kt) logic and many people wondered, what will be the official way to deal with navigation within Jetpack Compose, until now (or soon enough). The Jetpack Navigation library is about to reach its first release 🙌🏽
+Last year, the Android team at Google announced Jetpack Compose. Since then, it has been seeing lots of updates; dev releases, and starting a few months ago, alpha releases with lots of great samples. Many of the sample apps [implemented](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Owl/app/src/main/java/com/example/owl/ui/utils/Navigation.kt) [their](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetsnack/app/src/main/java/com/example/jetsnack/ui/utils/Navigation.kt) own [Navigation](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/JetNews/app/src/main/java/com/example/jetnews/ui/Navigation.kt) logic and many people wondered, what will be the official way to deal with navigation within Jetpack Compose, until now (or soon enough). The Jetpack Navigation library is about to reach its first release 🙌🏽
 
 ![GitHub screenshot of Jetpack Compose Navigation available for release commit](/assets/posts/2020/10/1-nav-compose-available-for-release.png){:.my-figure}
 
@@ -24,8 +24,9 @@ Besides being the official solution, the Jetpack Navigation library uses the and
 
 How can you get your hands on this shiny piece of code and use it in your Jetpack Compose project?
 
-1. From the [`androidx.dev`](http://androidx.dev) maven repository where the Android team releases snapshots!
-2. In your root `build.gradle` file, add:
+From the [`androidx.dev`](http://androidx.dev) maven repository where the Android team releases snapshots!
+
+1. In your root `build.gradle` file, add:
 
     ```groovy
 allprojects {
@@ -36,29 +37,26 @@ allprojects {
 }
     ```
 
-3. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6893483`.
-4. In the `depedencies` block of your app's `build.gradle` file, add:
+2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6909004`.
+3. In the `depedencies` block of your app's `build.gradle` file, add:
 
     ```groovy
-implementation "androidx.compose.navigation:navigation:1.0.0-SNAPSHOT"
+implementation "androidx.navigation:navigation-compose:1.0.0-SNAPSHOT"
     ```
 
 # Creating a simple Nav Graph
 
-It's very simple to implement a simple hierarchical navigation where there is only one backstack and the whole application is within this backstack. Let's create three screens called and add them to the NavGraph:
+It's very simple to implement a simple hierarchical navigation where there is only one backstack and the whole application is within this backstack. Let's create two screens called `Profile` and `Dashboard` and add them to the NavGraph:
 
 ```kotlin
 @Composable
-fun VeryBasicNav() {
+fun SimpleNav() {
   NavHost(startDestination = "Profile") { // this: NavGraphBuilder
     composable("Profile") {
       Profile()
     }
     composable("Dashboard") {
       Dashboard()
-    }
-    composable("Scrollable") {
-      Scrollable()
     }
   }
 }
@@ -89,9 +87,9 @@ fun Profile() {
 
 ## The Result
 
-[Link to GitHub code for Basic Nav](https://github.com/AfzalivE/Fun-Compose/tree/1-very-basic-nav)
+[Simple Nav code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/simple/SimpleNav.kt)
 
-<video controls class="my-figure" preload="auto">
+<video id="figure-2" controls class="my-figure" preload="auto">
     <source src="/assets/posts/2020/10/very-basic-nav-config-changes-process-death.webm" type="video/webm">
     <source src="/assets/posts/2020/10/very-basic-nav-config-changes-process-death.mp4" type="video/mp4">
 </video>
@@ -105,9 +103,27 @@ All of that is automatically handled already through the androidx Navigation lib
 
 ## Can I provide arguments for the destination?
 
-Not yet but NavArgs support is already in [review](https://android-review.googlesource.com/c/platform/frameworks/support/+/1423769)!
+Absolutely! Instead of calling `navigate("Dashboard")`, just pass a bundle of arguments like this:
 
-![Gerrit screenshot with NavGraph support commit](/assets/posts/2020/10/2-added-nav-args-support.png){:.my-figure}
+```kotlin
+navController.navigate("Dashboard", bundleOf("title" to "My Dashboard Title"))
+```
+
+Then, in our NavGraphBuilder, we can access these arguments through `backStackEntry` and pass them on to the Composable.
+
+```kotlin
+@Composable
+fun SimpleNav() {
+  NavHost(startDestination = "Profile") { // this: NavGraphBuilder
+    // .. other composables
+    composable("Dashboard") { backStackEntry ->
+      Dashboard(
+        title = backStackEntry.arguments?.get("title") as String
+      )
+    }
+  }
+}
+```
 
 **Figure 3** - NavArgs support coming soon!
 {:.figcaption}
@@ -115,7 +131,7 @@ Not yet but NavArgs support is already in [review](https://android-review.google
 
 ## Do I need to do anything to survive process death?
 
-Not at all! As the [video](#creating-a-simple-nav-graph) shows, process death support comes built-in and we don't need to do anything further for simple hierarchies. However, as we will see in the BottomNavigation example later, there are some caveats when we need to manually save and restore the `NavHost` state.
+Not at all! As the [video](#figure-2) shows, process death support comes built-in and we don't need to do anything further for simple hierarchies. However, as we will see in the BottomNavigation example in [part 2]({% all_post_url 2020-10-15-multiple-navigation-graphs-with-jetpack-compose-navigation %}), there are some caveats when we need to manually save and restore the `NavHost` state.
 
 
 # How can I update my TopAppBar title?
@@ -142,15 +158,12 @@ private fun FunComposeApp() {
       NavHost(
         navController = navController,
         startDestination = "Profile"
-            ) { // this: NavGraphBuilder
+      ) { // this: NavGraphBuilder
         composable("Profile") {
           Profile()
         }
         composable("Dashboard") {
           Dashboard()
-        }
-        composable("Scrollable") {
-          Scrollable()
         }
       }
     }
@@ -179,16 +192,12 @@ Let's go through this line by line.
 
 That is because `currentScreen?.destination?.id.toString()` doesn't actually return the `destinationId` that we provide to `navController.navigate()`. Internally, the `navigate()` function uses the `hashCode` of that string + an initial ID of `0x00010000`.
 
-I think part of the API will improve in the future.
-{:.note}
-
-We need to find out which screen it is from this ID and display the details we need. Let's define our screens now:
+We'll use this ID to determine which screen is being displayed, then use that to set the title. Let's define our screens now:
 
 ```kotlin
 sealed class Screen(val title: String) {
   object Profile : Screen("Profile")
   object Dashboard : Screen("Dashboard")
-  object Scrollable : Screen("Scrollable")
 
 /**
  * hack to generate the same Destination ID that
@@ -204,7 +213,6 @@ fun NavDestination.toScreen(): Screen {
   return when (id) {
     Screen.Profile.id -> Screen.Profile
     Screen.Dashboard.id -> Screen.Dashboard
-    Screen.Scrollable.id -> Screen.Scrollable
     else -> Screen.Profile
   }
 }
@@ -222,7 +230,7 @@ TopAppBar(
 
 ## The Result
 
-[Link to GitHub code for Basic Nav with a TopAppBar](https://github.com/AfzalivE/Fun-Compose/tree/2-basic-nav-dynamic-topbar)
+[Basic Nav with a TopAppBar code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/simple/TopBarNav.kt)
 
 <video controls class="my-figure" preload="auto">
     <source src="/assets/posts/2020/10/basic-nav-with-TopAppBar.webm" type="video/webm">
@@ -231,45 +239,6 @@ TopAppBar(
 
 **Figure 5** - Basic Navigation with TopAppBar with the correct title
 {:.figcaption}
-
-# Adding NavDestinations Dynamically
-
-It is possible that one might need to add destinations after the NavGraph is already built. It is possible, however, I'm not sure about the extent of support here. It is also entirely possible that this functionality is not needed at all but since I explored it, I'll just mention an issue I had with it.
-
-In this example, I added the `PhraseDetail` destination when `Scrollable` screen was composed by passing it the `NavGraphBuilder` instance (from the `NavHost` builder function).
-
-```kotlin
-/**
- * An example of how to add a dynamic destination to
- * an existing NavGraph but doing this will
- */
-@Composable
-fun Scrollable(navGraphBuilder: NavGraphBuilder) {
-  val navController = AmbientNavController.current
-  Column(modifier = Modifier.fillMaxSize().then(Modifier.padding(8.dp))) {
-    navController.graph.addDestination(
-      ComposeNavigator.Destination(
-        navGraphBuilder.provider[ComposeNavigator::class]
-      ) {
-        PhraseDetail()
-      }.apply { id = Screen.PhraseDetail.id })
-
-    LazyColumnFor(items = phrases) {
-      ListItem(
-        text = { Text(text = it) },
-        modifier = Modifier.clickable(onClick = {
-            navController.navigate(Screen.PhraseDetail.title)
-        })
-      )
-    }
-  }
-}
-```
-
-Since we have access to the `NavHostController` at this point, we can create destinations using the `ComposeNavigator` and add them to it. We also have to manually generate an ID for the destination.
-
-There is one tiny issue with this: It seems that when we are relying on the built-in process restoration in the Jetpack Navigation library, this particular use case causes the app to crash because it cannot find the destination at the time of restore.
-{:.note}
 
 # GitHub repository
 

@@ -6,7 +6,7 @@ tags: android jetpack compose navigation ui
 published: true
 ---
 
-In part 1, I wrote about [how to get started with the Jetpack Compose Navigation library]({% all_post_url 2020-10-15-intro-to-jetpack-compose-navigation %}). We discussed how to create a simple navigation graph and how to obtain information about the graph outside it. Now, let's explore how we can use multiple navigation graphs in a Bottom Navigation-driven UI.
+In part 1, I wrote about [how to get started with the Jetpack Compose Navigation library]({% all_post_url 2020-10-15-intro-to-jetpack-compose-navigation %}). I discussed how to create a simple navigation graph and how to obtain information about the graph outside it. Now, let's explore how we can use multiple navigation graphs in a Bottom Navigation-driven UI.
 
 * this ordered seed list will be replaced by the toc
 {:toc}
@@ -29,7 +29,7 @@ fun TabContent(screen: Screen) {
   when (screen) {
     Screen.Profile -> Profile()
     Screen.Dashboard -> NavDashboard()
-    Screen.Scrollable -> NoClickScrollable()
+    Screen.Phrases -> Phrases()
     else -> Profile()
   }
 }
@@ -52,7 +52,7 @@ fun NavDashboard() {
 }
 ```
 
-We pass the selected screen to this Composable, it shows it. Our Dashboard screen has changed though. That's the screen we need navigation inside, `NavDashboard` just creates a `NavHost` and defines a NavGraph. `Dashboard` has also changed a little, now it contains a Button that navigates to `DashboardDetail` when clicked. We've also add it to the previously defined `Screen` sealed class.
+We pass the selected screen to this Composable, it shows it. Our Dashboard tab has changed though. That's the tab we need navigation inside, `NavDashboard` just creates a `NavHost` and defines a NavGraph. `Dashboard` now has a Button that navigates to the `DashboardDetail` screen when clicked. We've also add it to the previously defined `Screen` sealed class.
 
 <video controls id="figure-1" class="my-figure" preload="auto">
     <source src="/assets/posts/2020/10/bottom-nav-backpress-issue.webm" type="video/webm">
@@ -66,7 +66,7 @@ That looks good, right? Looks like there are a few issues though.
 
 ## Back button doesn't seem to work properly
 
-It seems that back button taps get intercepted by the `NavHostController` even if we leave the Composable containing the `NavHost` (i.e. the Dashboard Screen). I'm not sure why this is happening and it looks like a bug (I have to confirm this from someone before I file a bug though).
+It seems that back button taps get intercepted by the `NavHostController` even if we leave the tab containing the `NavHost` (i.e. the Dashboard Screen). I'm not sure why this is happening and it looks like a bug (I have to confirm this from someone before I file a bug though).
 
 In the meantime, I have found that disabling the `NavHostController`'s OnBackPressed functionality in `onDispose` seems to fix this. When NavDashboard is recomposed, this resets back to true.
 
@@ -155,26 +155,26 @@ The backstack state will now persist across process death.
 The currently selected screen in TabContent doesn't survive process death. The code on GitHub shows how to do this as well.
 {:.note}
 
-[Link to GitHub code for Bottom Navigation example](https://github.com/AfzalivE/Fun-Compose/tree/3-bottom-nav-single-nav-graph)
+[Bottom Navigation code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/bottomnav/SingleNavGraph.kt)
 
 ## Multiple NavGraphs within BottomNavigation
 
-What if we want to keep multiple backstacks, within multiple tabs? Actually, it's not very different from keeping one NavGraph. Let's convert the `Scrollable` screen to have its own backstack. It will navigate to a new screen called `PhraseDetail`.
+What if we want to keep multiple backstacks, within multiple tabs? Actually, it's not very different from keeping one NavGraph. Let's create a `Phrases` screen to have its own backstack. It will navigate to a new screen called `PhraseDetail`.
 
 ```kotlin
 @Composable
 fun TabContent(screen: Screen) {
   val dashboardNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
-  val scrollableNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
+  val phrasesNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
   when (screen) {
     Screen.Dashboard -> NavDashboard(dashboardNavState)
-    Screen.Scrollable -> NavScrollable(scrollableNavState)
+    Screen.Phrases -> NavPhrases(phrasesNavState)
     // .. other screens
   }
 }
 
 @Composable
-fun NavScrollable(navState: MutableState<Bundle>) {
+fun NavPhrases(navState: MutableState<Bundle>) {
   val navController = rememberNavController()
   navController.addOnDestinationChangedListener { navController, _, _ ->
     navState.value = navController.saveState() ?: Bundle()
@@ -183,10 +183,10 @@ fun NavScrollable(navState: MutableState<Bundle>) {
 
   NavHost(
     navController = navController,
-    startDestination = "Scrollable"
+    startDestination = "Phrases"
   ) {
-    composable("Scrollable") {
-        Scrollable(this)
+    composable("Phrases") {
+        Phrases(this)
     }
     composable("PhraseDetail") {
         PhraseDetail()
@@ -201,7 +201,7 @@ fun NavScrollable(navState: MutableState<Bundle>) {
 }
 ```
 
-`NavScrollable` ends up looking very similar to `NavDashboard`. At this point, we could probably create a `RestorableNavHost` that just contains this functionality, takes a `MutableState<Bundle>` and a `NavGraphBuilder` function.
+`NavPhrases` ends up looking very similar to `NavDashboard`. At this point, we could probably create a `RestorableNavHost` that just contains this functionality, takes a `MutableState<Bundle>` and a `NavGraphBuilder` function.
 
 ## The Result
 
@@ -217,7 +217,7 @@ fun NavScrollable(navState: MutableState<Bundle>) {
 
 All of the code discussed in this blog post is available here:
 
-[https://github.com/AfzalivE/Fun-Compose/tree/4-bottom-nav-multiple-nav-graph](https://github.com/AfzalivE/Fun-Compose/tree/4-bottom-nav-multiple-nav-graph)
+[Multiple Nav Graphs code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/bottomnav/MultiNavGraph.kt)
 
 # Conclusion
 
