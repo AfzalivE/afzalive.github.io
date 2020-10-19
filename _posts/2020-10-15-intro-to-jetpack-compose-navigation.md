@@ -1,12 +1,15 @@
 ---
 layout: post
 title: Intro to Jetpack Compose Navigation
-date: '2020-10-19 10:10:40 -0400'
+date: '2020-10-19 08:10:40 -0400'
 tags: android jetpack compose navigation ui
 published: true
 ---
 
 Last year, the Android team at Google announced Jetpack Compose. Since then, it has been seeing lots of updates; dev releases, and starting a few months ago, alpha releases with lots of great samples. Many of the sample apps [implemented](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Owl/app/src/main/java/com/example/owl/ui/utils/Navigation.kt) [their](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetsnack/app/src/main/java/com/example/jetsnack/ui/utils/Navigation.kt) own [Navigation](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/JetNews/app/src/main/java/com/example/jetnews/ui/Navigation.kt) logic and many people wondered, what will be the official way to deal with navigation within Jetpack Compose, until now (or soon enough). The Jetpack Navigation library is about to reach its first release 🙌🏽
+
+> _This is Part 1 of a 2-part article about Jetpack Compose Navigation. [Click here for Part 2]({% all_post_url 2020-10-15-multiple-navigation-graphs-with-jetpack-compose-navigation %})._
+{:.faded}
 
 ![GitHub screenshot of Jetpack Compose Navigation available for release commit](/assets/posts/2020/10/1-nav-compose-available-for-release.png){:.my-figure}
 
@@ -252,3 +255,12 @@ All of the code discussed in this blog post is available here:
 # Conclusion
 
 I think Jetpack Navigation is going to simplify navigation code for a lot of people. Like all things in Compose, it is simple to use in most cases. In [part 2]({% all_post_url 2020-10-15-multiple-navigation-graphs-with-jetpack-compose-navigation %}), we're going to create multiple navigation graphs in a Bottom Navigation-based UI.
+
+
+Found this article interesting, or better yet, found a bug in the article? Please comment and let me know!
+{:.faded}
+
+
+_Thanks to the [Compose Navigation samples](https://github.com/androidx/androidx/tree/androidx-master-dev/navigation/navigation-compose/samples) by the Androidx Team, and thanks to [Neal Manaktola](https://www.linkedin.com/in/nealmanaktola/) for reviewing this article._
+{:.faded}
+

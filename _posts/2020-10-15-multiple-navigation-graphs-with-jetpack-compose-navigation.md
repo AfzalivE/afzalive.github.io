@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Multiple NavGraphs with Compose Navigation
-date: '2020-10-19 10:10:40 -0400'
+date: '2020-10-19 08:10:40 -0400'
 tags: android jetpack compose navigation ui
 published: true
 ---
@@ -234,3 +234,11 @@ All of the code discussed in this blog post is available here:
 # Conclusion
 
 While it was still relatively simple to achieve this, there were a few things we had to be careful of. Since this is pre-alpha/alpha stage, I'm sure some (if not all) of the issues mentioned here will be addressed by the time this is production ready. I'm really excited for Compose and how it shapes the future of Android development and the quality of apps that we will be able to create.
+
+
+Found this article interesting, or better yet, found a bug in the article? Please comment and let me know!
+{:.faded}
+
+
+_Thanks to the [Compose Navigation samples](https://github.com/androidx/androidx/tree/androidx-master-dev/navigation/navigation-compose/samples) by the Androidx Team, and thanks to [Neal Manaktola](https://www.linkedin.com/in/nealmanaktola/) for reviewing this article._
+{:.faded}
