@@ -73,7 +73,7 @@ legal:
   #   url:               /CHANGELOG/
 
 # Format of the permalinks
-permalink:             /:categories/:name/
+permalink:             /:categories/:title/
 
 # Pagination configuration (used by the `blog` layout)
 paginate:              10
@@ -309,7 +309,7 @@ collections:
     output:            true
 
   drafts:
-    permalink:         /:categories/:name/
+    permalink:         /:categories/:title/
     output:            true
 
 

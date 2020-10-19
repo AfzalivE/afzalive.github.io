@@ -37,12 +37,12 @@ From the [`androidx.dev`](http://androidx.dev) maven repository where the Androi
 allprojects {
      repositories {
        // .. existing repositories
-       maven { url = 'https://androidx.dev/snapshots/builds/[buildId]/artifacts/ui/repository' }
+       maven { url = 'https://androidx.dev/snapshots/builds/[buildId]/artifacts/repository' }
      }
 }
     ```
 
-2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6909004`.
+2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6914953`.
 3. In the `dependencies` block of your app's `build.gradle` file, add:
 
     ```groovy
