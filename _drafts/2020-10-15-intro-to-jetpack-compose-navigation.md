@@ -90,8 +90,8 @@ fun Profile() {
 [Simple Nav code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/simple/SimpleNav.kt)
 
 <video id="figure-2" controls class="my-figure" preload="auto">
-    <source src="/assets/posts/2020/10/very-basic-nav-config-changes-process-death.webm" type="video/webm">
-    <source src="/assets/posts/2020/10/very-basic-nav-config-changes-process-death.mp4" type="video/mp4">
+    <source src="/assets/posts/2020/10/simple-nav-config-changes-process-death.webm" type="video/webm">
+    <source src="/assets/posts/2020/10/simple-nav-config-changes-process-death.mp4" type="video/mp4">
 </video>
 
 **Figure 2** - Simple navigation with config changes and process death
@@ -181,8 +181,8 @@ Let's go through this line by line.
 3. Finally, we pass this our `NavHostController` to the `NavHost` Composable so it uses that instead of creating its own and voila!
 
 <video controls class="my-figure" preload="auto">
-    <source src="/assets/posts/2020/10/basic-nav-with-TopAppBar-wrong-title.webm" type="video/webm">
-    <source src="/assets/posts/2020/10/basic-nav-with-TopAppBar-wrong-title.mp4" type="video/mp4">
+    <source src="/assets/posts/2020/10/TopAppBar-nav-wrong-title.webm" type="video/webm">
+    <source src="/assets/posts/2020/10/TopAppBar-nav-wrong-title.mp4" type="video/mp4">
 </video>
 
 **Figure 4** - Basic Navigation with TopAppBar but wrong title
@@ -233,8 +233,8 @@ TopAppBar(
 [Basic Nav with a TopAppBar code on GitHub](https://github.com/AfzalivE/Fun-Compose/blob/main/app/src/main/java/com/afzaln/funcompose/navigation/simple/TopBarNav.kt)
 
 <video controls class="my-figure" preload="auto">
-    <source src="/assets/posts/2020/10/basic-nav-with-TopAppBar.webm" type="video/webm">
-    <source src="/assets/posts/2020/10/basic-nav-with-TopAppBar.mp4" type="video/mp4">
+    <source src="/assets/posts/2020/10/TopAppBar-nav-dynamic-title.webm" type="video/webm">
+    <source src="/assets/posts/2020/10/TopAppBar-nav-dynamic-title.mp4" type="video/mp4">
 </video>
 
 **Figure 5** - Basic Navigation with TopAppBar with the correct title
