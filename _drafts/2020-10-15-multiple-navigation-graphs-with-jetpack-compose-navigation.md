@@ -42,10 +42,10 @@ fun NavDashboard() {
     navController = navController,
     startDestination = "Dashboard"
   ) {
-    composable(Screen.Dashboard.title) {
+    composable("Dashboard") {
         Dashboard()
     }
-    composable(Screen.DashboardDetail.title) {
+    composable("DashboardDetail") {
         Text("Some Dashboard detail")
     }
   }

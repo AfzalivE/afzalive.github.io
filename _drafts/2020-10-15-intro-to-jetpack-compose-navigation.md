@@ -38,7 +38,7 @@ allprojects {
     ```
 
 2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6909004`.
-3. In the `depedencies` block of your app's `build.gradle` file, add:
+3. In the `dependencies` block of your app's `build.gradle` file, add:
 
     ```groovy
 implementation "androidx.navigation:navigation-compose:1.0.0-SNAPSHOT"
@@ -61,6 +61,9 @@ fun SimpleNav() {
   }
 }
 ```
+
+You don't have to use a `String` for the Composable `id` inside the `NavGraphBuilder`. You can use any type.
+{:.note}
 
 We're using the `NavGraphBuilder` instance, provided by the `NavHost` Composable and the `composable` extension function to add destinations to the NavGraph.
 
