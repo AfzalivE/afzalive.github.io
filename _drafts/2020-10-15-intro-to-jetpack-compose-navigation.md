@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Intro to Jetpack Compose Navigation
-date: '2020-10-14 10:10:40 -0400'
+date: '2020-10-19 10:10:40 -0400'
 tags: android jetpack compose navigation ui
 published: true
 ---
@@ -137,7 +137,7 @@ fun SimpleNav() {
 Not at all! As the [video](#figure-2) shows, process death support comes built-in and we don't need to do anything further for simple hierarchies. However, as we will see in the BottomNavigation example in [part 2]({% all_post_url 2020-10-15-multiple-navigation-graphs-with-jetpack-compose-navigation %}), there are some caveats when we need to manually save and restore the `NavHost` state.
 
 
-# How can I update my TopAppBar title?
+# How can I update the TopAppBar title?
 
 So if the `NavHostController` is only accessible to screens within the NavGraph, does this mean my TopAppBar and other common elements need to be replicated inside every screen?
 

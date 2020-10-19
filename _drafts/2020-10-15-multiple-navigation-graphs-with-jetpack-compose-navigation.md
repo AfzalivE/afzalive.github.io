@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Multiple NavGraphs with Compose Navigation
-date: '2020-10-14 10:10:40 -0400'
+date: '2020-10-19 10:10:40 -0400'
 tags: android jetpack compose navigation ui
 published: true
 ---
@@ -66,7 +66,7 @@ That looks good, right? Looks like there are a few issues though.
 
 ## Back button doesn't seem to work properly
 
-It seems that back button taps get intercepted by the `NavHostController` even if we leave the tab containing the `NavHost` (i.e. the Dashboard Screen). I'm not sure why this is happening and it looks like a bug (I have to confirm this from someone before I file a bug though).
+It seems that back button taps get intercepted by the `NavHostController` even if we leave the tab containing the `NavHost` (i.e. the Dashboard Screen). I'm not sure why this is happening and it looks like a bug but I could be wrong. I have to confirm this before I file a bug.
 
 In the meantime, I have found that disabling the `NavHostController`'s OnBackPressed functionality in `onDispose` seems to fix this. When NavDashboard is recomposed, this resets back to true.
 
@@ -109,17 +109,27 @@ fun TabContent(screen: Screen) {
 
 @Composable
 fun NavDashboard(navState: MutableState<Bundle>) {
-  val navController = rememberNavController()
-  navController.addOnDestinationChangedListener { navController, _, _ ->
-    navState.value = navController.saveState() ?: Bundle()
+
+  onCommit {
+    val navController = rememberNavController()
+    navController.addOnDestinationChangedListener { navController, _, _ ->
+      navState.value = navController.saveState() ?: Bundle()
+    }
+    navController.restoreState(navState.value)
+
+    onDispose {
+      navController.removeOnDestinationChangedListener(callback)
+      // workaround for issue where back press is intercepted
+      // outside this tab, even after this Composable is disposed
+      navController.enableOnBackPressed(false)
+    }
   }
-  navController.restoreState(navState.value)
 
   // .. NavHost stuff
 }
 ```
 
-`NavHostController` provides us the `saveState()` and the `restoreState(Bundle)` functions to manually handle the state of the backstack. On every destination change, we save the state to  `navState` and every time `NavDashboard` gets recomposed, we restore its state from `navState`. We keep this `navState` in `TabContent` so it survives even when `NavDashboard` is disposed.
+`NavHostController` provides us the `saveState()` and the `restoreState(Bundle)` functions to manually handle the state of the backstack. On every destination change, we save the state to  `navState` and every time `NavDashboard` gets recomposed, we restore its state from `navState`. We keep this `navState` in `TabContent` so it survives even when `NavDashboard` is disposed. We also remove the `OnDestinationChangedListener` from the `navController` when this Composable is disposed to avoid creating unnecessary listeners on every recomposition.
 
 Okay, this is working now. We're able to keep Dashboard screen's backstack, even as we switch away and return to it!
 
@@ -175,11 +185,19 @@ fun TabContent(screen: Screen) {
 
 @Composable
 fun NavPhrases(navState: MutableState<Bundle>) {
-  val navController = rememberNavController()
-  navController.addOnDestinationChangedListener { navController, _, _ ->
-    navState.value = navController.saveState() ?: Bundle()
+  onCommit {
+    val callback = NavController.OnDestinationChangedListener { navController, _, _ ->
+      navState.value = navController.saveState() ?: Bundle()
+    }
+    navController.addOnDestinationChangedListener(callback)
+    navController.restoreState(navState.value)
+    onDispose {
+      navController.removeOnDestinationChangedListener(callback)
+      // workaround for issue where back press is intercepted
+      // outside this tab, even after this Composable is disposed
+      navController.enableOnBackPressed(false)
+    }
   }
-  navController.restoreState(navState.value)
 
   NavHost(
     navController = navController,
@@ -191,12 +209,6 @@ fun NavPhrases(navState: MutableState<Bundle>) {
     composable("PhraseDetail") {
         PhraseDetail()
     }
-  }
-
-  onDispose {
-    // workaround for issue where back press is intercepted
-    // outside this tab, even after this Composable is disposed
-    navController.enableOnBackPressed(false)
   }
 }
 ```
