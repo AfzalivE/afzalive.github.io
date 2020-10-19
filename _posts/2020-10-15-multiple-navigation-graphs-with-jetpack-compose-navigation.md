@@ -2,7 +2,9 @@
 layout: post
 title: Multiple NavGraphs with Compose Navigation
 date: '2020-10-19 08:10:40 -0400'
-tags: android jetpack compose navigation ui
+tags: android jetpack-compose ui
+image:
+  path: '/assets/img/jetpack-compose-hero.svg'
 published: true
 ---
 

@@ -1,5 +1,5 @@
 ---
-layout: list
+layout: tag-list
 title:  Android
 slug:   android
 description:
