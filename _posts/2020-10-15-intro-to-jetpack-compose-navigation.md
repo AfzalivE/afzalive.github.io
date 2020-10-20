@@ -42,7 +42,7 @@ allprojects {
 }
     ```
 
-2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6914953`.
+2. Replace `[buildId]` with the latest build ID from [https://androidx.dev/snapshots/builds](https://androidx.dev/snapshots/builds). This post uses `buildId = 6916278`.
 3. In the `dependencies` block of your app's `build.gradle` file, add:
 
     ```groovy
@@ -51,14 +51,15 @@ implementation "androidx.navigation:navigation-compose:1.0.0-SNAPSHOT"
 
 # Creating a simple Nav Graph
 
-It's very simple to implement a simple hierarchical navigation where there is only one backstack and the whole application is within this backstack. Let's create two screens called `Profile` and `Dashboard` and add them to the NavGraph:
+It's very simple to implement a simple hierarchical navigation where there is only one backstack and the whole application is within this backstack. First, we create our own `NavController` using `rememberNavController()`. After that, we can create a `NavHost` instance with two screens called `Profile` and `Dashboard`. Since we will navigate from Profile -> Dashboard after this, let's pass our `navController` to the `Profile` Composable.
 
 ```kotlin
 @Composable
 fun SimpleNav() {
-  NavHost(startDestination = "Profile") { // this: NavGraphBuilder
+  val navController = rememberNavController()
+  NavHost(navController, startDestination = "Profile") { // this: NavGraphBuilder
     composable("Profile") {
-      Profile()
+      Profile(navController)
     }
     composable("Dashboard") {
       Dashboard()
@@ -70,18 +71,15 @@ fun SimpleNav() {
 You don't have to use a `String` for the Composable `id` inside the `NavGraphBuilder`. You can use any type.
 {:.note}
 
-We're using the `NavGraphBuilder` instance, provided by the `NavHost` Composable and the `composable` extension function to add destinations to the NavGraph.
+We're using the `NavGraphBuilder` instance, provided by the `NavHost` Composable and the `composable` extension function to add destinations to the NavGraph. We have to pass the `navController` to any Composables that need use it.
 
 ## Navigating within the NavGraph
-
-All composables within the NavGraph can access the `NavHostController` through the `AmbientNavController` to navigate within the graph.
 
 Let's add navigation from Profile → Dashboard using a Button:
 
 ```kotlin
 @Composable
-fun Profile() {
-  val navController = AmbientNavController.current
+fun Profile(navController: NavController) {
   Column(modifier = Modifier.fillMaxSize().then(Modifier.padding(8.dp))) {
     Text(text = Screen.Profile.title)
     Button(
@@ -122,7 +120,8 @@ Then, in our NavGraphBuilder, we can access these arguments through `backStackEn
 ```kotlin
 @Composable
 fun SimpleNav() {
-  NavHost(startDestination = "Profile") { // this: NavGraphBuilder
+  val navController = rememberNavController()
+  NavHost(navController, startDestination = "Profile") { // this: NavGraphBuilder
     // .. other composables
     composable("Dashboard") { backStackEntry ->
       Dashboard(
@@ -144,9 +143,7 @@ Not at all! As the [video](#figure-2) shows, process death support comes built-i
 
 # How can I update the TopAppBar title?
 
-So if the `NavHostController` is only accessible to screens within the NavGraph, does this mean my TopAppBar and other common elements need to be replicated inside every screen?
-
-**No.** Thankfully, we can provide our own instance of a `NavHostController` to the `NavHost` composable. Let's try that:
+`navController.currentBackStackEntryAsState()` allows us to observe the state of the current backstack entry, so when we use it to set the title of `TopAppBar`, it will automatically update when the current backstack entry changes. Here's what that looks like in code:
 
 ```kotlin
 @Composable
@@ -168,7 +165,7 @@ private fun FunComposeApp() {
         startDestination = "Profile"
       ) { // this: NavGraphBuilder
         composable("Profile") {
-          Profile()
+          Profile(navController)
         }
         composable("Dashboard") {
           Dashboard()
@@ -179,14 +176,7 @@ private fun FunComposeApp() {
 }
 ```
 
-Let's go through this line by line.
-
-1. `rememberNavController()` is a way to quickly create a `NavHostController` that will survive configuration changes (🥳) and it uses a `ComposeNavigator`, which supports navigating through Composables.
-2. `navController.currentBackStackEntryAsState()` allows us to observe the state of the current backstack entry, so when we use it to set the title of `TopAppBar`, it will automatically update when the current backstack entry changes. That's what this line does:
-
-    `TopAppBar(title = { Text(currentScreen?.destination?.id.toString()) })`
-
-3. Finally, we pass this our `NavHostController` to the `NavHost` Composable so it uses that instead of creating its own and voila!
+Here's how it looks like on the device:
 
 <video controls class="my-figure" preload="auto">
     <source src="/assets/posts/2020/10/TopAppBar-nav-wrong-title.webm" type="video/webm">

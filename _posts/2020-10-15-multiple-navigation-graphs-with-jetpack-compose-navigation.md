@@ -29,15 +29,15 @@ Let's create a Composable that shows a screen based on which tab is selected:
 @Composable
 fun TabContent(screen: Screen) {
   when (screen) {
-    Screen.Profile -> Profile()
-    Screen.Dashboard -> NavDashboard()
+    Screen.Profile -> ProfileTab()
+    Screen.Dashboard -> DashboardTab()
     Screen.Phrases -> Phrases()
-    else -> Profile()
+    else -> ProfileTab()
   }
 }
 
 @Composable
-fun NavDashboard() {
+fun DashboardTab() {
   val navController = rememberNavController()
 
   NavHost(
@@ -45,7 +45,7 @@ fun NavDashboard() {
     startDestination = "Dashboard"
   ) {
     composable("Dashboard") {
-        Dashboard()
+        Dashboard(navController)
     }
     composable("DashboardDetail") {
         Text("Some Dashboard detail")
@@ -54,7 +54,7 @@ fun NavDashboard() {
 }
 ```
 
-We pass the selected screen to this Composable, it shows it. Our Dashboard tab has changed though. That's the tab we need navigation inside, `NavDashboard` just creates a `NavHost` and defines a NavGraph. `Dashboard` now has a Button that navigates to the `DashboardDetail` screen when clicked. We've also add it to the previously defined `Screen` sealed class.
+We pass the selected screen to this Composable, it shows it. Our Dashboard tab has changed though. That's the tab we need navigation inside, `DashboardTab` just creates a `NavHost` and defines a NavGraph. `Dashboard` now has a Button that navigates to the `DashboardDetail` screen when clicked. We've also add it to the previously defined `Screen` sealed class.
 
 <video controls id="figure-1" class="my-figure" preload="auto">
     <source src="/assets/posts/2020/10/bottom-nav-backpress-issue.webm" type="video/webm">
@@ -70,11 +70,11 @@ That looks good, right? Looks like there are a few issues though.
 
 It seems that back button taps get intercepted by the `NavHostController` even if we leave the tab containing the `NavHost` (i.e. the Dashboard Screen). I'm not sure why this is happening and it looks like a bug but I could be wrong. I have to confirm this before I file a bug.
 
-In the meantime, I have found that disabling the `NavHostController`'s OnBackPressed functionality in `onDispose` seems to fix this. When NavDashboard is recomposed, this resets back to true.
+In the meantime, I have found that disabling the `NavHostController`'s OnBackPressed functionality in `onDispose` seems to fix this. When DashboardTab is recomposed, this resets back to true.
 
 ```kotlin
 @Composable
-fun NavDashboard() {
+fun DashboardTab() {
   // ... existing code
 
   onDispose {
@@ -97,23 +97,23 @@ Works properly now! Pressing the back button closes the app now instead of doing
 
 ##  Dashboard's backstack gets cleared on switching tabs
 
-We can see in [figure 1](#figure-1) that Dashboard screen's backstack gets cleared when we switch tabs away from it. This is the default behaviour but it's easy to save and restore the backstack state. Let's create a `MutableState` to hold the navigation state and pass it to `NavDashboard`:
+We can see in [figure 1](#figure-1) that Dashboard screen's backstack gets cleared when we switch tabs away from it. This is the default behaviour but it's easy to save and restore the backstack state. Let's create a `MutableState` to hold the navigation state and pass it to `DashboardTab`:
 
 ```kotlin
 @Composable
 fun TabContent(screen: Screen) {
   val navState = remember { mutableStateOf(Bundle()) }
   when (screen) {
-    Screen.Dashboard -> NavDashboard(navState)
+    Screen.Dashboard -> DashboardTab(navState)
     // .. other screens
   }
 }
 
 @Composable
-fun NavDashboard(navState: MutableState<Bundle>) {
+fun DashboardTab(navState: MutableState<Bundle>) {
+  val navController = rememberNavController()
 
   onCommit {
-    val navController = rememberNavController()
     navController.addOnDestinationChangedListener { navController, _, _ ->
       navState.value = navController.saveState() ?: Bundle()
     }
@@ -131,7 +131,7 @@ fun NavDashboard(navState: MutableState<Bundle>) {
 }
 ```
 
-`NavHostController` provides us the `saveState()` and the `restoreState(Bundle)` functions to manually handle the state of the backstack. On every destination change, we save the state to  `navState` and every time `NavDashboard` gets recomposed, we restore its state from `navState`. We keep this `navState` in `TabContent` so it survives even when `NavDashboard` is disposed. We also remove the `OnDestinationChangedListener` from the `navController` when this Composable is disposed to avoid creating unnecessary listeners on every recomposition.
+`NavHostController` provides us the `saveState()` and the `restoreState(Bundle)` functions to manually handle the state of the backstack. On every destination change, we save the state to  `navState` and every time `DashboardTab` gets recomposed, we restore its state from `navState`. We keep this `navState` in `TabContent` so it survives even when `DashboardTab` is disposed. We also remove the `OnDestinationChangedListener` from the `navController` when this Composable is disposed to avoid creating unnecessary listeners on every recomposition.
 
 Okay, this is working now. We're able to keep Dashboard screen's backstack, even as we switch away and return to it!
 
@@ -179,14 +179,16 @@ fun TabContent(screen: Screen) {
   val dashboardNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
   val phrasesNavState = rememberSavedInstanceState(saver = NavStateSaver()) { mutableStateOf(Bundle()) }
   when (screen) {
-    Screen.Dashboard -> NavDashboard(dashboardNavState)
-    Screen.Phrases -> NavPhrases(phrasesNavState)
+    Screen.Dashboard -> DashboardTab(dashboardNavState)
+    Screen.Phrases -> PhrasesTab(phrasesNavState)
     // .. other screens
   }
 }
 
 @Composable
-fun NavPhrases(navState: MutableState<Bundle>) {
+fun PhrasesTab(navState: MutableState<Bundle>) {
+  val navController = rememberNavController()
+
   onCommit {
     val callback = NavController.OnDestinationChangedListener { navController, _, _ ->
       navState.value = navController.saveState() ?: Bundle()
@@ -206,7 +208,7 @@ fun NavPhrases(navState: MutableState<Bundle>) {
     startDestination = "Phrases"
   ) {
     composable("Phrases") {
-        Phrases(this)
+        Phrases(navController)
     }
     composable("PhraseDetail") {
         PhraseDetail()
@@ -215,7 +217,7 @@ fun NavPhrases(navState: MutableState<Bundle>) {
 }
 ```
 
-`NavPhrases` ends up looking very similar to `NavDashboard`. At this point, we could probably create a `RestorableNavHost` that just contains this functionality, takes a `MutableState<Bundle>` and a `NavGraphBuilder` function.
+`PhrasesTab` ends up looking very similar to `DashboardTab`. At this point, we could probably create a `RestorableNavHost` that just contains this functionality, takes a `MutableState<Bundle>` and a `NavGraphBuilder` function.
 
 ## The Result
 
