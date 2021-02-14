@@ -3,10 +3,9 @@ layout: about
 title: Hi there! I'm Afzal Najam.
 menu: true
 order: 3
-description: You're probably be wondering how you got here.
 ---
 
-I'm an Android developer who loves basketball. I currently work at [Doist](https://doist.com/), on the [Todoist](https://play.google.com/store/apps/details?id=com.todoist) and [Twist](https://play.google.com/store/apps/details?id=com.twistapp) apps. I live in Toronto, Canada. You can reach me through [these platforms](#contact-me)
+I'm an Android developer who loves basketball. I currently work at [Doist](https://doist.com/), on the [Todoist](https://play.google.com/store/apps/details?id=com.todoist) and [Twist](https://play.google.com/store/apps/details?id=com.twistapp) apps. I live in Toronto, Canada. You can reach me through [these platforms](#contact-me).
 
 I like building mobile applications and I love contributing to open source software in my spare time. Some of the projects I've contributed to in the past include:
 
