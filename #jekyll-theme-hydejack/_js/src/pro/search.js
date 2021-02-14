@@ -79,7 +79,10 @@ const calcSrcSet = (srcset) =>
 
     // Load search worker after user interaction
     await once(document, 'click');
-    const worker = new Worker(workerHref);
+
+    const worker = new Worker('./search.worker.js', { type: 'module' });
+    postMessage(worker, window._search);
+
     let prevVal = '';
     fromEvent(searchInputEl, 'keyup')
       .pipe(
@@ -112,7 +115,7 @@ const calcSrcSet = (srcset) =>
                         </div>
                         <div class="search-text">
                           <p>
-                            <a class="heading" href=${relativeUrl(item.url)}>${item.title}</a>
+                            <a class="heading" href=${relativeUrl(item.url)} tabindex="1">${item.title}</a>
                             <small>${item.url}</small>
                           </p>
                           ${item.description ? html` <p>${item.description}</p> ` : ''}

@@ -12,7 +12,9 @@ const SEL_NAVBAR_BTN_BAR = '#_navbar > .content > .nav-btn-bar';
     const navbarEl = document.querySelector(SEL_NAVBAR_BTN_BAR);
     navbarEl?.insertBefore(darkMode, navbarEl.querySelector('.nav-span'));
 
-    document.getElementById('_dark-mode')?.addEventListener('click', (e) => {
+    const navbarBtn = document.getElementById('_dark-mode');
+
+    navbarBtn?.addEventListener('click', (e) => {
       e.preventDefault();
       const list = document.body.classList;
       if (
@@ -21,9 +23,11 @@ const SEL_NAVBAR_BTN_BAR = '#_navbar > .content > .nav-btn-bar';
       ) {
         list.remove('dark-mode');
         list.add('light-mode');
+        navbarBtn.dispatchEvent(new CustomEvent('hydejack-dark-mode-toggle', { detail: false, bubbles: true }));
       } else {
         list.remove('light-mode');
         list.add('dark-mode');
+        navbarBtn.dispatchEvent(new CustomEvent('hydejack-dark-mode-toggle', { detail: true, bubbles: true }));
       }
     });
 

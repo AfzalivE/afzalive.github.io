@@ -1,9 +1,16 @@
 import { importTemplate, intersectOnce, loadCSS, stylesheetReady, once } from './common';
 import { fromEvent } from 'rxjs';
-import { concatMap, tap } from 'rxjs/operators';
-// import { createElement } from 'create-element-x/library';
+import { concatMap } from 'rxjs/operators';
+import { createElement } from 'create-element-x/library';
+import tippy from 'tippy.js';
 
 // import LANG from './languages.json';
+
+const toggleClass = (element, ...cls) => {
+  element.classList.remove(...cls);
+  void element.offsetWidth;
+  element.classList.add(...cls);
+};
 
 (async () => {
   await Promise.all([
@@ -19,8 +26,8 @@ import { concatMap, tap } from 'rxjs/operators';
   const FN_LINK_SEL = "a[href^='#fn:']";
   const HORIZONTAL_SCROLL_SEL =
     'pre, table:not(.highlight), .katex-display, .break-layout, mjx-container[jax="CHTML"][display="true"]';
-  // const CODE_BLOCK_SEL = 'pre.highlight > code';
-  // const CODE_TITLE_RE = /(?:title|file):\s*['"`](([^'"`\\]|\\.)*)['"`]/iu;
+  const CODE_BLOCK_SEL = 'pre.highlight > code';
+  const CODE_TITLE_RE = /(?:title|file):\s*['"`](([^'"`\\]|\\.)*)['"`]/iu;
   const HEADING_SELECTOR = 'h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]';
 
   const IMG_FADE_DURATION = 500;
@@ -32,6 +39,8 @@ import { concatMap, tap } from 'rxjs/operators';
   };
 
   const pushStateEl = document.querySelector('hy-push-state');
+
+  const CODE_LINE_HEIGHT = 1.5;
 
   /** @param {(param0: HTMLElement|null) => void} fn
    *  @param {any=} opts */
@@ -64,6 +73,39 @@ import { concatMap, tap } from 'rxjs/operators';
   ready((main) => {
     if (!main) return;
 
+    tippy(main.querySelectorAll('.post-date > .ellipsis'), {
+      trigger: 'click',
+      touch: true,
+      interactive: true,
+      allowHTML: true,
+      maxWidth: 'none',
+      placement: 'bottom-start',
+      offset: 0,
+      content: (el) => el.innerHTML,
+      onTrigger(instance, event) {
+        if (event.target.tagName === 'A') {
+          instance._hideOnce = true;
+        }
+      },
+      onShow(instance) {
+        if (instance._hideOnce) {
+          return (instance._hideOnce = false);
+        }
+      },
+    });
+
+    tippy(main.querySelectorAll('abbr[title]'), {
+      trigger: 'click',
+      touch: true,
+      maxWidth: 500,
+      content: (el) => el.getAttribute('title'),
+    });
+
+    tippy(main.querySelectorAll('.sidebar-social [title]'), {
+      touch: true,
+      content: (el) => el.getAttribute('title'),
+    });
+
     main.querySelectorAll(HEADING_SELECTOR).forEach((h) => {
       const df = importTemplate('_permalink-template');
       const a = df.querySelector('.permalink');
@@ -74,7 +116,23 @@ import { concatMap, tap } from 'rxjs/operators';
     const toc = main.querySelector('#markdown-toc');
     if (toc) toc.classList.add('toc-hide');
 
-    /*
+    if ('clipboard' in navigator) {
+      Array.from(main.querySelectorAll(CODE_BLOCK_SEL)).forEach((el) => {
+        const container = el?.parentNode?.parentNode;
+        const writeText = async () => {
+          await navigator.clipboard.writeText(el.innerText);
+          toggleClass(copyBtn, 'copy-success');
+        };
+        const copyBtn = createElement(
+          'button',
+          { onClick: writeText },
+          createElement('small', { class: 'icon-copy', title: 'Copy' }),
+          createElement('small', { class: 'icon-checkmark', title: 'Done' }),
+        );
+        container?.appendChild(copyBtn);
+      });
+    }
+
     Array.from(main.querySelectorAll(CODE_BLOCK_SEL))
       .map((code) => code.children[0])
       .forEach((el) => {
@@ -102,20 +160,19 @@ import { concatMap, tap } from 'rxjs/operators';
         const container = code.parentNode.parentNode;
 
         // Language
-        const highlighter = container.parentNode;
-        const [, lang] = highlighter.classList.value.match(/language-(\w*)/) ?? [];
-        const language = LANG[lang];
+        // const highlighter = container.parentNode;
+        // const [, lang] = highlighter.classList.value.match(/language-(\w*)/) ?? [];
+        // const language = LANG[lang];
 
         const header = createElement(
           'div',
           { class: 'pre-header break-layout' },
-          createElement('span', { class: 'file' }, createElement('small', { class: 'icon-file-empty' }), ' ', fileName),
-          !language ? null : createElement('small', { class: 'fr lang' }, language),
+          createElement('span', {}, createElement('small', { class: 'icon-file-empty' }), ' ', fileName),
+          // !language ? null : createElement('small', { class: 'fr lang' }, language),
         );
 
         container.insertBefore(header, container.firstChild);
       });
-    */
 
     if ('complete' in HTMLImageElement.prototype) {
       main.querySelectorAll('img[width][height][loading=lazy]').forEach((el) => {
@@ -163,26 +220,22 @@ import { concatMap, tap } from 'rxjs/operators';
         el.addEventListener('touchstart', (e) => el.scrollLeft > 0 && e.stopPropagation(), { passive: false }),
       );
 
-    /*
-    Array.from(main.querySelectorAll(CODE_BLOCK_SEL)).forEach((code) => {
-      const sw = code.parentElement?.scrollWidth;
-      Array.from(code.querySelectorAll('.c1'))
-        .filter((c1) => c1.innerText.includes('!!'))
-        .forEach((c1) => {
-          const hl = createElement('span', {
-            class: 'highlight-code-line',
-            style: `width: ${sw ? `${sw}px` : '100%'}`,
-          });
-          const hasContent = c1.innerText?.match(/[\p{L}|\d]/u);
-          if (!hasContent) {
-            c1.parentElement?.replaceChild(hl, c1);
-          } else {
-            c1.innerText = c1.innerText.replace('!!', '');
-            c1.parentElement?.insertBefore(hl, c1);
-          }
-        });
-    });
-    */
+    // Array.from(main.querySelectorAll(CODE_BLOCK_SEL)).forEach((code) => {
+    //   Array.from(code.querySelectorAll('span[class^="c"]'))
+    //     .filter((c1) => c1.innerText.includes('!!'))
+    //     .forEach((c1) => {
+    //       const [, n] = c1.innerText.match(/!!\s*(\d+)/) || [, '1'];
+    //       const hl = createElement('span', { class: '__hl', style: `height: ${Number(n) * CODE_LINE_HEIGHT}em` });
+    //       c1.innerText = c1.innerText.replace(`!!${n}`, '!!');
+    //       const hasContent = c1.innerText?.match(/[\p{L}|\d]/u);
+    //       if (!hasContent) {
+    //         c1.parentElement?.replaceChild(hl, c1);
+    //       } else {
+    //         c1.innerText = c1.innerText.replace('!!', '');
+    //         c1.parentElement?.insertBefore(hl, c1);
+    //       }
+    //     });
+    // });
 
     const katexHref = document.getElementById('_katexPreload')?.href;
     if (!katexPromise && katexHref) {
@@ -214,7 +267,7 @@ import { concatMap, tap } from 'rxjs/operators';
     await MathJax.typesetPromise();
 
     if (!window._noPushState) {
-      pushStateEl.addEventListener('ready', (e) => mathJax2To3(e));
+      pushStateEl.addEventListener('ready', mathJax2To3);
       fromEvent(pushStateEl, 'after')
         .pipe(concatMap(() => MathJax.typesetPromise()))
         .subscribe();

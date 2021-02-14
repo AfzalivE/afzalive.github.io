@@ -1,10 +1,16 @@
 // Copyright (c) 2019 Florian Klampfer <https://qwtel.com/>
 
-import { fromEvent, of, zip } from 'rxjs';
+import { fromEvent, Observable, of, zip } from 'rxjs';
 import { tap, finalize, filter, switchMap } from 'rxjs/operators';
 
 import { animate, empty } from '../../common';
 
+/**
+ * @param {Observable<any>} start$
+ * @param {Observable<any>} ready$
+ * @param {Observable<any>} fadeIn$
+ * @param {any} opts
+ */
 export function setupFLIPProject(start$, ready$, fadeIn$, { animationMain, settings }) {
   if (!animationMain) return start$;
 
@@ -55,9 +61,7 @@ export function setupFLIPProject(start$, ready$, fadeIn$, { animationMain, setti
       const invertScale = first.width / last.width;
 
       const transform = [
-        {
-          transform: `translate3d(${invertX}px, ${invertY}px, 0) scale(${invertScale})`,
-        },
+        { transform: `translate3d(${invertX}px, ${invertY}px, 0) scale(${invertScale})` },
         { transform: 'translate3d(0, 0, 0) scale(1)' },
       ];
 
@@ -87,7 +91,12 @@ export function setupFLIPProject(start$, ready$, fadeIn$, { animationMain, setti
               switchMap(() =>
                 img != null ? animate(animationMain, [{ opacity: 1 }, { opacity: 0 }], { duration: 500 }) : of({}),
               ),
-              finalize(() => (animationMain.style.opacity = 0)),
+              finalize(() => {
+                animationMain.style.opacity = 0;
+
+                const page = animationMain.querySelector('.page');
+                empty.call(page);
+              }),
             );
           }),
         ),
