@@ -11,6 +11,9 @@ published: true
 Update: This article was written before compose-navigation reached alpha01 and has been not updated since to reflect the changes in alpha01.
 {:.note}
 
+Update 2: I strongly recommend following the [official Jetpack Compose Navigation codelab](https://developer.android.com/codelabs/jetpack-compose-navigation) instead of following this article.
+{:.note}
+
 In part 1, I wrote about [how to get started with the Jetpack Compose Navigation library]({% all_post_url 2020-10-15-intro-to-jetpack-compose-navigation %}). I discussed how to create a simple navigation graph and how to obtain information about the graph outside it. Now, let's explore how we can use multiple navigation graphs in a Bottom Navigation-driven UI.
 
 * this ordered seed list will be replaced by the toc
