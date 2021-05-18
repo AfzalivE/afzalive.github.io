@@ -11,6 +11,9 @@ published: true
 Update: This article was written before compose-navigation reached alpha01 and has been not updated since to reflect the changes in alpha01.
 {:.note}
 
+Update 2: I strongly recommend following the [official Jetpack Compose Navigation codelab](https://developer.android.com/codelabs/jetpack-compose-navigation) instead of following this article.
+{:.note}
+
 Last year, the Android team at Google announced Jetpack Compose. Since then, it has been seeing lots of updates; dev releases, and starting a few months ago, alpha releases with lots of great samples. Many of the sample apps [implemented](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Owl/app/src/main/java/com/example/owl/ui/utils/Navigation.kt) [their](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/Jetsnack/app/src/main/java/com/example/jetsnack/ui/utils/Navigation.kt) own [Navigation](https://github.com/android/compose-samples/blob/1630f6b35ac9e25fb3cd3a64208d7c9afaaaedc5/JetNews/app/src/main/java/com/example/jetnews/ui/Navigation.kt) logic and many people wondered, what will be the official way to deal with navigation within Jetpack Compose, until now (or soon enough). The Jetpack Navigation library is about to reach its first release 🙌🏽
 
 > _This is Part 1 of a 2-part article about Jetpack Compose Navigation. [Click here for Part 2]({% all_post_url 2020-10-15-multiple-navigation-graphs-with-jetpack-compose-navigation %})._
